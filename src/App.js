@@ -21,6 +21,7 @@ import Login from './pages/Login';
 import BidangPage from './pages/bidang/Bidang';
 import SubBidangPage from './pages/subBidang/subBidang';
 import MateriPage from './pages/materi/Materi';
+import IsiMateri from './pages/materi/IsiMateri';
 
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
           <Route index element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />
+          <Route path="/isi-materi/:id" element={<IsiMateri />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/result" element={<Result />} />
           <Route path="*" element={<NotFound />} />

@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 const MateriPage = () => {
   const { id } = useParams();  // Mengambil SubId dari URL
   const [materi, setMateriData] = useState([]);  // State untuk daftar materi
+  const [namaSubBidang, setNamaSubBidang] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Menyiapkan navigasi untuk pindah ke halaman materi
 
@@ -28,10 +29,24 @@ const MateriPage = () => {
     fetchDataMateri();
   }, [id]);
 
+  useEffect(() => {
+    const fetchDataSubBidang = async () => {
+      try {
+        const data = await fetchData(`sub-bidang/pilih/${id}`);
+        if (data) {
+        setNamaSubBidang(data.subNama);          
+        }        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchDataSubBidang();
+  }, [id]);
+
   // Jika tidak ada materi untuk SubId yang diberikan
   if (!materi.length) return (
     <div className="pt-4 mb-4 ml-3">
-      <h1 className="ml-3 mb-3">Materi untuk Sub Bidang: {id}</h1>
+      <h1 className="ml-3 mb-3">Materi untuk Sub Bidang: {namaSubBidang}</h1>
         <button 
             className="btn btn-secondary mb-4 ml-3" 
             onClick={() => navigate(-1)} // Navigasi ke halaman sebelumnya

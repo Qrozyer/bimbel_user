@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 const SubBidangPage = () => {
   const { id } = useParams();  // Mengambil bidangId dari URL
+  const [namaBidang, setNamaBidang] = useState('');
   const [subBidang, setSubBidangData] = useState([]);  // State untuk daftar sub bidang
   const dispatch = useDispatch();  // Menggunakan dispatch untuk memperbarui state Redux
   const navigate = useNavigate(); // Menyiapkan navigasi untuk pindah ke halaman sub bidang
@@ -28,10 +29,28 @@ const SubBidangPage = () => {
     fetchDataSubBidang();
   }, [id]);
 
+  useEffect(() => {
+    const fetchDataBidang = async () => {
+      try {
+        const data = await fetchData('bidang');
+        if (data) {
+          const filteredBidang = data.filter((item) => item.BidangId === parseInt(id));
+          if (filteredBidang.length > 0) {
+            setNamaBidang(filteredBidang[0].BidangNama);
+          }
+        }
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchDataBidang();
+  }, [id]);
+
   // Jika data kosong, tampilkan tombol Kembali dan Tambah Sub Bidang
   if (!subBidang.length) return (
     <div className="pt-4 mb-4 ml-3">
-      <h1 className="ml-3 mb-3">Sub Bidang untuk Bidang: {subBidang[0]?.BidangNama}</h1>
+      <h1 className="ml-3 mb-3">Sub Bidang untuk Bidang: {namaBidang}</h1>
       {/* Tombol Kembali */}
       <button 
         className="btn btn-secondary mb-4 ml-3" 
@@ -44,7 +63,7 @@ const SubBidangPage = () => {
 
   return (
     <div className="m-5">
-      <h1 className="ml-4 mb-3">Sub Bidang untuk Bidang: {subBidang[0]?.BidangNama}</h1>
+      <h1 className="ml-4 mb-3">Sub Bidang untuk Bidang: {namaBidang}</h1>
       {/* Tombol Kembali */}
       <button 
         className="btn btn-secondary mb-4 ml-4" 

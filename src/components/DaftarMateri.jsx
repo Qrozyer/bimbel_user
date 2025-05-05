@@ -11,7 +11,7 @@ const DaftarMateri = ({ data }) => {
 
   const handleCardClick = (id) => {
     // Navigasi ke halaman detail materi berdasarkan ID
-    navigate(`/soal/${id}`);
+    navigate(`/isi-materi/${id}`);
   };
 
   return (
@@ -37,8 +37,7 @@ const DaftarMateri = ({ data }) => {
               <table className="table table-borderless" style={{ width: '100%', fontSize: '14px' }}>
                 <tbody>
                   <tr>
-                    <td style={{ width: '20%' }}><strong>{item.MateriJudul}</strong></td>
-                    <td style={{ width: '20%' }} dangerouslySetInnerHTML={{ __html: item.MateriIsi }}></td>
+                    <td style={{ width: '20%' }}><strong>{item.MateriJudul}</strong></td>                    
                   </tr>
                 </tbody>
               </table>
