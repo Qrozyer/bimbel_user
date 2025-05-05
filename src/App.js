@@ -20,6 +20,7 @@ import NotFound from './components/NotFound';
 import Login from './pages/Login';
 import BidangPage from './pages/bidang/Bidang';
 import SubBidangPage from './pages/subBidang/subBidang';
+import MateriPage from './pages/materi/Materi';
 
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
+          <Route path="/materi/:id" element={<MateriPage />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/result" element={<Result />} />
           <Route path="*" element={<NotFound />} />
