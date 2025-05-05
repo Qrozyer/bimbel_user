@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBidang } from '../../actions/bidangActions';
 import Swal from 'sweetalert2';
 import { fetchData, deleteData } from '../../utils/api'; 
-import TableDashboard from '../../components/TableDashboard';
+import DaftarBidang from '../../components/DaftarBidang';
 import { useNavigate } from 'react-router-dom'; 
 
 const BidangPage = () => {
-  const dispatch = useDispatch();
   const bidang = useSelector((state) => state.bidang.bidang);
-  const navigate = useNavigate(); // Ganti useHistory() dengan useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchDataBidang = async () => {
@@ -27,24 +27,14 @@ const BidangPage = () => {
     return (
       <div style={{ margin: '20px auto', padding: '20px', maxWidth: '1200px' }}>
         <h3 className="text-center">Data Bidang Tidak Tersedia</h3>
-        <button className="btn btn-secondary mb-4 ml-3" onClick={() => navigate(-1)}>
-          Kembali
-        </button>
       </div>
     );
   }
 
   return (
     <div style={{ margin: '20px auto', padding: '20px', maxWidth: '1200px' }}>
-      <button className="btn btn-secondary mb-4 ml-3" onClick={() => navigate(-1)}>
-        Kembali
-      </button>
-      <button className="btn btn-primary mb-4 ml-3" onClick={() => navigate('/soal/add')}>
-        Buat Soal Baru
-      </button>
-      <h3 className="ml-4 mb-4">Tambah Soal Berdasarkan Materi</h3>
-      <h5 className="ml-4 mb-4 text-secondary">Pilih Bidang</h5>
-      <TableDashboard 
+      <h5 className="p-2 ml-6 mb-4 text-secondary">Pilih Bidang</h5>
+      <DaftarBidang 
         data={bidang}         
       />
     </div>

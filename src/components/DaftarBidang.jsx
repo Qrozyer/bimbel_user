@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Mengimpor useNavigate
 
-const TableDashboard = ({ data }) => {
+const DaftarBidang = ({ data }) => {
   const navigate = useNavigate(); // Menyiapkan navigasi untuk pindah ke halaman sub bidang
 
   if (!data || !Array.isArray(data)) { 
@@ -42,4 +42,4 @@ const TableDashboard = ({ data }) => {
   );
 };
 
-export default TableDashboard;
+export default DaftarBidang;

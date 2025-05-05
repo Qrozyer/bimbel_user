@@ -19,6 +19,7 @@ import NotFound from './components/NotFound';
 
 import Login from './pages/Login';
 import BidangPage from './pages/bidang/Bidang';
+import SubBidangPage from './pages/subBidang/subBidang';
 
 
 const App = () => {
@@ -30,13 +31,13 @@ const App = () => {
         <Route path="/login" element={<Login />} />
 
         <Route element={<PrivateRoute />}>
-          // <Route path="/" element={<Layout />}>
-            // <Route index element={<Home />} />
-            // <Route path="/bidang" element={<BidangPage />} />
-            // <Route path="/quiz" element={<Quiz />} />
-            // <Route path="/result" element={<Result />} />
-            // <Route path="*" element={<NotFound />} />
-          // </Route>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<BidangPage />} />
+          <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/result" element={<Result />} />
+          <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
       </Routes>
     </Router>
