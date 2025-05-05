@@ -5,6 +5,11 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 const baseURL = process.env.REACT_APP_BASE_URL;
+const USER = process.env.REACT_APP_USER;
+const PASS = process.env.REACT_APP_PASS;
+const USER_VALUE = process.env.REACT_APP_USER_VALUE;
+const PASS_VALUE = process.env.REACT_APP_PASS_VALUE;
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -20,8 +25,8 @@ function Login() {
         const res = await axios.get(`${baseURL}/token`, {
           headers: {
             'Content-Type': 'application/json',
-            'x-email': 'test',
-            'x-password': 'testing',
+            [USER]: USER_VALUE,
+            [PASS]: PASS_VALUE,
           },
         });
 
