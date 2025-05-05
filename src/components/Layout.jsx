@@ -1,4 +1,3 @@
-// src/components/Layout.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
@@ -8,21 +7,41 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   return (
-    <div className="wrapper">
-      <Navbar />
+    <>
+      <style>
+        {`
+          html, body, #root {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+          }
+          .wrapper {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+          }
+          .content-wrapper {
+            flex: 1;
+            background-color: #f4f6f9;
+          }
+        `}
+      </style>
 
-      {/* AdminLTE content wrapper */}
-      <div className="content-wrapper">
-        <section className="content">
-          <div className="container-fluid pt-3">
-            <Outlet />
-          </div>
-        </section>
+      <div className="wrapper">
+        <Navbar />
+
+        <div className="content-wrapper">
+          <section className="content">
+            <div className="container-fluid pt-3">
+              <Outlet />
+            </div>
+          </section>
+        </div>
+
+        <Footer />
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
-
-      <Footer />
-      <ToastContainer position="top-right" autoClose={3000} />
-    </div>
+    </>
   );
 };
 

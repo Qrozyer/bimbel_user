@@ -15,7 +15,6 @@ const Result = () => {
 
   return (
     <>
-    <Navbar/>
     <div>
       <h2>Hasil Ujian</h2>
       <p>Jumlah soal: {questions.length}</p>

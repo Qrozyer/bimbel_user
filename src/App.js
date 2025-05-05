@@ -15,7 +15,11 @@ import Home from './components/Home';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 import NotFound from './components/NotFound';
+
+
 import Login from './pages/Login';
+import BidangPage from './pages/bidang/Bidang';
+
 
 const App = () => {
   return (
@@ -25,8 +29,10 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Layout />}>
-            <Route path="/quiz" element={<Quiz />} />
-            <Route path="/result" element={<Result />} />
+          <Route index element={<Home />} />
+          <Route path="/bidang" element={<BidangPage />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/result" element={<Result />} />
         </Route>
         {/* <Route element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
