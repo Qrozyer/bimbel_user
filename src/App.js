@@ -28,18 +28,16 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/bidang" element={<BidangPage />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/result" element={<Result />} />
+
+        <Route element={<PrivateRoute />}>
+          // <Route path="/" element={<Layout />}>
+            // <Route index element={<Home />} />
+            // <Route path="/bidang" element={<BidangPage />} />
+            // <Route path="/quiz" element={<Quiz />} />
+            // <Route path="/result" element={<Result />} />
+            // <Route path="*" element={<NotFound />} />
+          // </Route>
         </Route>
-        {/* <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="*" element={<NotFound />} />
-          </Route> */}
-        {/* </Route> */}
       </Routes>
     </Router>
   );
