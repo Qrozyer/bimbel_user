@@ -35,11 +35,7 @@ const Quiz = () => {
 
   return (
     <div>
-      <Navbar/>
       <Timer />
-
-      
-
       <div>
       <div className="container">
     <div className="card">

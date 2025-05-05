@@ -1,30 +1,40 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'admin-lte/dist/css/adminlte.min.css';
+import 'admin-lte/dist/js/adminlte.min.js';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Quiz from './components/Quiz';
 import Result from './components/Result';
-import Login from './components/Login';
 import Home from './components/Home';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+import PrivateRoute from './components/PrivateRoute';
+import Layout from './components/Layout';
+import NotFound from './components/NotFound';
+import Login from './pages/Login';
 
 const App = () => {
   return (
+    
     <Router>
-      <div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/result" element={<Result />} />
-
-          <Route path="*" element={<Navigate to="/" />} /> {/* Arahkan ke Home */}
-        </Routes>
-
-        <Footer/>
-      </div>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Layout />}>
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/result" element={<Result />} />
+        </Route>
+        {/* <Route element={<PrivateRoute />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Route> */}
+        {/* </Route> */}
+      </Routes>
     </Router>
   );
 };
