@@ -9,8 +9,6 @@ import 'admin-lte/dist/js/adminlte.min.js';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Quiz from './components/Quiz';
-import Result from './components/Result';
 import Home from './components/Home';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
@@ -22,6 +20,10 @@ import BidangPage from './pages/bidang/Bidang';
 import SubBidangPage from './pages/subBidang/subBidang';
 import MateriPage from './pages/materi/Materi';
 import IsiMateri from './pages/materi/IsiMateri';
+import ProfilPeserta from './pages/profile/Profil';
+import UjianPage from './pages/ujian/Ujian';
+import QuizPage from './pages/ujian/QuizPage';
+import ResultPage from './pages/ujian/ResultPage';
 
 
 const App = () => {
@@ -34,12 +36,15 @@ const App = () => {
 
         <Route element={<PrivateRoute />}>
         <Route path="/" element={<Layout />}>
-          <Route index element={<BidangPage />} />
+          <Route index element={<Home />} />
+          <Route path="/bidang" element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />
           <Route path="/isi-materi/:id" element={<IsiMateri />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/result" element={<Result />} />
+          <Route path="/ujian/:ujianid" element={<UjianPage />} />
+          <Route path="/profil" element={<ProfilPeserta />} />
+          <Route path="/quiz-ujian/:sectionId" element={<QuizPage />} />
+          <Route path="/result" element={<ResultPage />} />
           <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = () => {
-  const [timeLeft, setTimeLeft] = useState(600); // 10 menit = 600 detik
+const Timer = ({ duration }) => {
+  const [timeLeft, setTimeLeft] = useState(duration); // Durasi dalam detik
 
   useEffect(() => {
     if (timeLeft === 0) return;

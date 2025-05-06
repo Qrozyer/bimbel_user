@@ -14,11 +14,8 @@ const Navbar =() => {
                   <Link className="nav-link active" aria-current="page" to="/">Beranda</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/quiz">Mulai Ujian</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/result">Hasil Ujian</Link>
-                </li>
+                  <Link className="nav-link" to="/profil">Profil</Link>
+                </li> 
               </ul>
             </div>
           </div>

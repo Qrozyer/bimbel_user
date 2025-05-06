@@ -1,15 +1,15 @@
-// src/pages/Login.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { setPeserta } from '../reducers/pesertaSlice'; // Impor setPeserta untuk menyimpan data ke Redux
+
 const baseURL = process.env.REACT_APP_BASE_URL;
 const USER = process.env.REACT_APP_USER;
 const PASS = process.env.REACT_APP_PASS;
 const USER_VALUE = process.env.REACT_APP_USER_VALUE;
 const PASS_VALUE = process.env.REACT_APP_PASS_VALUE;
-
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -29,43 +29,58 @@ function Login() {
             [PASS]: PASS_VALUE,
           },
         });
-
-        //Menyimpan token yang diterima dari response API 
         setToken(res.data.token);
       } catch (error) {
-        //menangani error jika token tidak berhasil diambil
         console.error('Error:', error);
         toast.error('Gagal mengambil token');
       }
     };
 
-    //memanggil fungsi fetchToken saat komponen pertama kali dimuat
     fetchToken();
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+  
+    // Pastikan token sudah ada sebelum melanjutkan
+    if (!token) {
+      toast.error('Token belum tersedia!');
+      return;
+    }
+  
     try {
+      // Mengirim request POST ke /login/peserta dengan header Authorization berisi token
       const res = await axios.post(`${baseURL}/login/peserta`, {
-        PesertaEmail : email,
-        PesertaPassword : password,
-      },
-      {
+        PesertaEmail: email,
+        PesertaPassword: password,
+      }, {
         headers: {
-          Authorization: token, // Menggunakan token yang diambil sebelumnya
+          Authorization: `Bearer ${token}`, // Menggunakan token dengan "Bearer"
+          'Content-Type': 'application/json', // Menambahkan Content-Type
+          'Accept': 'application/json', // Menambahkan Accept header
         }
       });
 
-
+  
       // Tampilkan pesan dari response
       toast.success(res.data.message || 'Login berhasil!');
       sessionStorage.setItem('token', token);
-      navigate('/');
+  
+      // Simpan data peserta ke Redux setelah login berhasil
+      if (res.data) {
+        console.log('Peserta ditemukan:', res.data);  // Debug peserta
+        dispatch(setPeserta(res.data)); // Menyimpan data peserta ke Redux
+      } else {
+        console.warn('Peserta tidak ditemukan di response:', res.data);
+      }
+  
+      navigate('/'); // Redirect ke halaman utama setelah login
     } catch (error) {
       const msg = error.response?.data?.message || 'Login gagal!';
       toast.error(msg);
     }
   };
+  
 
   return (
     <div className="hold-transition login-page">
