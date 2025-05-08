@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from '../../utils/api';
+import Swal from 'sweetalert2';
 
 const IsiMateri = () => {
   const { id } = useParams();
   const [materi, setMateri] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(false);  // State untuk menandakan materi selesai
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +22,22 @@ const IsiMateri = () => {
     };
     getMateri();
   }, [id]);
+
+  const handleCompletion = async () => {
+    const result = await Swal.fire({
+      title: 'Konfirmasi',
+      text: 'Apakah Anda yakin sudah menyelesaikan materi ini?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Selesai',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      setIsCompleted(true);
+      Swal.fire('Selesai!', 'Anda telah menyelesaikan materi.', 'success');
+    }
+  };
 
   if (!materi) {
     return <div style={{ textAlign: 'center', marginTop: '60px' }}>Memuat materi...</div>;
@@ -63,6 +81,26 @@ const IsiMateri = () => {
         }}
         dangerouslySetInnerHTML={{ __html: materi.MateriIsi }}
       />
+
+      {/* Tombol selesai */}
+      {!isCompleted && (
+        <button
+          className="btn btn-success mt-4"
+          onClick={handleCompletion}
+        >
+          Selesai
+        </button>
+      )}
+
+      {/* Tombol mulai ujian, muncul setelah konfirmasi selesai */}
+      {isCompleted && (
+        <button
+          className="btn btn-primary mt-4 ms-2"
+          onClick={() => navigate('/ujian-materi')}  // Sesuaikan dengan rute ujian Anda
+        >
+          Mulai Ujian
+        </button>
+      )}
     </div>
   );
 };

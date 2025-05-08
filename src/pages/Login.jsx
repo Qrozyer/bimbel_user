@@ -39,47 +39,48 @@ function Login() {
     fetchToken();
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-  
-    // Pastikan token sudah ada sebelum melanjutkan
-    if (!token) {
-      toast.error('Token belum tersedia!');
-      return;
-    }
-  
-    try {
-      // Mengirim request POST ke /login/peserta dengan header Authorization berisi token
-      const res = await axios.post(`${baseURL}/login/peserta`, {
-        PesertaEmail: email,
-        PesertaPassword: password,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Menggunakan token dengan "Bearer"
-          'Content-Type': 'application/json', // Menambahkan Content-Type
-          'Accept': 'application/json', // Menambahkan Accept header
-        }
-      });
+  // Login page
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-  
-      // Tampilkan pesan dari response
-      toast.success(res.data.message || 'Login berhasil!');
-      sessionStorage.setItem('token', token);
-  
-      // Simpan data peserta ke Redux setelah login berhasil
-      if (res.data) {
-        console.log('Peserta ditemukan:', res.data);  // Debug peserta
-        dispatch(setPeserta(res.data)); // Menyimpan data peserta ke Redux
-      } else {
-        console.warn('Peserta tidak ditemukan di response:', res.data);
+  // Pastikan token sudah ada sebelum melanjutkan
+  if (!token) {
+    toast.error('Token belum tersedia!');
+    return;
+  }
+
+  try {
+    // Mengirim request POST ke /login/peserta dengan header Authorization berisi token
+    const res = await axios.post(`${baseURL}/login/peserta`, {
+      PesertaEmail: email,
+      PesertaPassword: password,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Menggunakan token dengan "Bearer"
+        'Content-Type': 'application/json', // Menambahkan Content-Type
+        'Accept': 'application/json', // Menambahkan Accept header
       }
-  
-      navigate('/'); // Redirect ke halaman utama setelah login
-    } catch (error) {
-      const msg = error.response?.data?.message || 'Login gagal!';
-      toast.error(msg);
+    });
+
+    // Tampilkan pesan dari response
+    toast.success(res.data.message || 'Login berhasil!');
+    sessionStorage.setItem('token', token);
+
+    // Simpan data peserta ke sessionStorage setelah login berhasil
+    if (res.data) {
+      console.log('Peserta ditemukan:', res.data);  // Debug pesertaa
+      sessionStorage.setItem('peserta', JSON.stringify(res.data)); // Menyimpan data peserta ke sessionStorage
+    } else {
+      console.warn('Peserta tidak ditemukan di response:', res.data);
     }
-  };
+
+    navigate('/'); // Redirect ke halaman utama setelah login
+  } catch (error) {
+    const msg = error.response?.data?.message || 'Login gagal!';
+    toast.error(msg);
+  }
+};
+
   
 
   return (

@@ -23,7 +23,7 @@ import IsiMateri from './pages/materi/IsiMateri';
 import ProfilPeserta from './pages/profile/Profil';
 import UjianPage from './pages/ujian/Ujian';
 import QuizPage from './pages/ujian/QuizPage';
-import ResultPage from './pages/ujian/ResultPage';
+import HasilUjian from './pages/ujian/HasilUjian';
 
 
 const App = () => {
@@ -44,7 +44,7 @@ const App = () => {
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
           <Route path="/quiz-ujian/:sectionId" element={<QuizPage />} />
-          <Route path="/result" element={<ResultPage />} />
+          <Route path="/hasil-ujian/:sectionId/:pesertaId" element={<HasilUjian />} />  
           <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

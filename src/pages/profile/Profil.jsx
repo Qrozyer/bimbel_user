@@ -1,11 +1,18 @@
-// src/pages/ProfilPesertaPage.jsx
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 
 const ProfilPesertaPage = () => {
-  const peserta = useSelector((state) => state.peserta);
-  console.log('State peserta:', peserta);
+  const [peserta, setPeserta] = useState(null);
 
+  useEffect(() => {
+    // Mengambil data peserta dari sessionStorage
+    const storedPeserta = JSON.parse(sessionStorage.getItem('peserta'));
+
+    if (storedPeserta) {
+      setPeserta(storedPeserta); // Menyimpan data peserta ke state
+    }
+  }, []);
+
+  // Jika data peserta belum ada, tampilkan pesan error
   if (!peserta) {
     return (
       <div style={styles.errorContainer}>
@@ -27,6 +34,7 @@ const ProfilPesertaPage = () => {
 };
 
 export default ProfilPesertaPage;
+
 const styles = {
   container: {
     display: 'flex',
