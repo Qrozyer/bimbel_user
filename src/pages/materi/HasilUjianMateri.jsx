@@ -3,15 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from '../../utils/api'; // Mengimpor fungsi fetchData
 import Swal from 'sweetalert2';
 
-const HasilUjianPage = () => {
-  const { sectionId, pesertaId } = useParams(); // Mengambil parameter sectionId dan pesertaId dari URL
+const HasilUjianMateri = () => {
+  const { materiId, pesertaId } = useParams(); // Mengambil parameter materiId dan pesertaId dari URL
   const navigate = useNavigate();
   const [result, setResult] = useState(null);
 
   useEffect(() => {
     const getResult = async () => {
       try {
-        const data = await fetchData(`ujian/hasil/${sectionId}/${pesertaId}`);
+        const data = await fetchData(`ujian/materi/hasil/nilai/${materiId}/${pesertaId}`);
         if (data) {
           setResult(data); // Menyimpan data hasil ujian ke state
         }
@@ -25,7 +25,7 @@ const HasilUjianPage = () => {
     };
 
     getResult();
-  }, [sectionId, pesertaId]);
+  }, [materiId, pesertaId]);
 
   // Menampilkan hasil ujian jika data sudah tersedia
   if (!result) {
@@ -39,7 +39,7 @@ const HasilUjianPage = () => {
         <div className="card-body">
           <h5>Jumlah Soal: {result.jumlah_soal}</h5>
           <h5>Jumlah Benar: {result.jumlah_benar}</h5>
-          <h5>Point: {result.point}</h5>
+          <h5>Jumlah Soal: {result.jumlah_salah}</h5>
         </div>
       </div>
       <button onClick={() => navigate('/')} className="btn btn-primary mt-3">
@@ -49,4 +49,4 @@ const HasilUjianPage = () => {
   );
 };
 
-export default HasilUjianPage;
+export default HasilUjianMateri;

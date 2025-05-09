@@ -96,7 +96,7 @@ const IsiMateri = () => {
       {isCompleted && (
         <button
           className="btn btn-primary mt-4 ms-2"
-          onClick={() => navigate('/ujian-materi')}  // Sesuaikan dengan rute ujian Anda
+          onClick={() => navigate(`/ujian-materi/${id}`)}  // Sesuaikan dengan rute ujian Anda
         >
           Mulai Ujian
         </button>

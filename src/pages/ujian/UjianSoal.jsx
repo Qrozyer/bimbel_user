@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // Mengimpor useSelector untuk mengambil data dari Redux
-import Quiz from '../../components/Quiz'; // Mengimpor komponen Quiz
+import SoalUjian from '../../components/SoalUjian'; // Mengimpor komponen Quiz
 import Timer from '../../components/Timer'; // Mengimpor komponen Timer
 import { fetchData } from '../../utils/api'; // Mengimpor fetchData dari utils/api
 
-const QuizPage = () => {
+const UjianSoal = () => {
   const { sectionId } = useParams(); // Mengambil sectionId dari URL
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const QuizPage = () => {
     const fetchQuestions = async () => {
       try {
         // Mengambil soal berdasarkan sectionId
-        const response = await fetchData(`/ujian/soal/${sectionId}`);
+        const response = await fetchData(`ujian/soal/${sectionId}`);
         if (response) {
           setQuestions(response); // Menyimpan soal ke state
         } else {
@@ -38,9 +38,9 @@ const QuizPage = () => {
     <div className="container py-4">
       <h1>Ujian Anda</h1>
       <Timer duration={durasi} /> {/* Timer untuk ujian menggunakan durasi dari Redux */}
-      <Quiz questions={questions} />
+      <SoalUjian questions={questions} />
     </div>
   );
 };
 
-export default QuizPage;
+export default UjianSoal;

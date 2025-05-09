@@ -22,8 +22,10 @@ import MateriPage from './pages/materi/Materi';
 import IsiMateri from './pages/materi/IsiMateri';
 import ProfilPeserta from './pages/profile/Profil';
 import UjianPage from './pages/ujian/Ujian';
-import QuizPage from './pages/ujian/QuizPage';
+import UjianSoal from './pages/ujian/UjianSoal';
 import HasilUjian from './pages/ujian/HasilUjian';
+import UjianMateri from './pages/materi/UjianMateri';
+import HasilUjianMateri from './pages/materi/HasilUjianMateri';
 
 
 const App = () => {
@@ -43,8 +45,10 @@ const App = () => {
           <Route path="/isi-materi/:id" element={<IsiMateri />} />
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
-          <Route path="/quiz-ujian/:sectionId" element={<QuizPage />} />
+          <Route path="/ujian-soal/:sectionId" element={<UjianSoal />} />
           <Route path="/hasil-ujian/:sectionId/:pesertaId" element={<HasilUjian />} />  
+          <Route path="/ujian-materi/:materiId" element={<UjianMateri />} />
+          <Route path="/hasil-materi/:materiId/:pesertaId" element={<HasilUjianMateri />} />  
           <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

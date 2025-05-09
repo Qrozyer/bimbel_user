@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { addData } from '../utils/api'; // Fungsi addData yang sudah kamu buat
 import Swal from 'sweetalert2'; // Import SweetAlert2
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const Quiz = ({ questions }) => {
+const MateriUjian = ({ questions }) => {
+  const {materiId} = useParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -40,8 +41,7 @@ const Quiz = ({ questions }) => {
     setAnswers((prevAnswers) => [
       ...prevAnswers,
       {
-        Id: currentQuestion.Id,
-        SectionId: currentQuestion.SectionId,
+        MsId: currentQuestion.MsId,        
         PesertaId: pesertaId, // Menggunakan PesertaId dari sessionStorage
         Jawaban: selectedOption, // Menyimpan alfabet (A, B, C, D, E)
       },
@@ -58,7 +58,7 @@ const Quiz = ({ questions }) => {
   const handleFinishQuiz = async () => {
     if (answers.length === questions.length) {
       // Kirim data jawaban ke API secara batch
-      const response = await addData('ujian/soal/bundle', answers);
+      const response = await addData('ujian/materi/bundle', answers);
       
       if (response) {
         Swal.fire({
@@ -66,7 +66,7 @@ const Quiz = ({ questions }) => {
           title: 'Ujian selesai!',
           text: 'Jawaban Anda berhasil disimpan!',
         }).then(() => {
-          navigate(`/hasil-ujian/${currentQuestion.SectionId}/${pesertaId}`); // Redirect ke halaman hasil ujian
+          navigate(`/hasil-materi/${materiId}/${pesertaId}`); // Redirect ke halaman hasil ujian
         });
       } else {
         Swal.fire({
@@ -96,7 +96,7 @@ const Quiz = ({ questions }) => {
     <div className="card mt-3">
       <div className="card-header">Soal {currentQuestionIndex + 1}</div>
       <div className="card-body">
-        <h4>{currentQuestion.Soal}</h4>
+        <h4 dangerouslySetInnerHTML={{ __html: currentQuestion.Soal }}></h4>
         {['A', 'B', 'C', 'D', 'E'].map((option, index) => (
           <div key={index} className="form-check">
             <input
@@ -108,8 +108,7 @@ const Quiz = ({ questions }) => {
               onChange={() => setSelectedOption(option)} // Menyimpan opsi yang dipilih (A, B, C, D, E)
               checked={selectedOption === option} // Menandai opsi terpilih
             />
-            <label className="form-check-label" htmlFor={`option-${index}`}>
-              {currentQuestion[`Opsi${option}`]} {/* Menampilkan Opsi A, B, C, D, E */}
+            <label className="form-check-label" htmlFor={`option-${index}`} dangerouslySetInnerHTML={{ __html: currentQuestion[`Opsi${option}`]}}>
             </label>
           </div>
         ))}
@@ -134,4 +133,4 @@ const Quiz = ({ questions }) => {
   );
 };
 
-export default Quiz;
+export default MateriUjian;

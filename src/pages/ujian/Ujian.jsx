@@ -13,14 +13,14 @@ const UjianPage = () => {
   const dispatch = useDispatch(); // Menginisialisasi dispatch Redux
 
   const handleStartQuiz = (sectionId) => {
-    navigate(`/quiz-ujian/${sectionId}`);
+    navigate(`/ujian-soal/${sectionId}`);
   };
 
   useEffect(() => {
     // Memanggil fetchData untuk mengambil data ujian berdasarkan ujianid
     const fetchUjianData = async () => {
       try {
-        const response = await fetchData(`/ujian/data/pilih/${ujianid}`); // Menggunakan fetchData
+        const response = await fetchData(`ujian/data/pilih/${ujianid}`); // Menggunakan fetchData
         setUjianData(response); // Menyimpan data ujian ke state
         setLoading(false);
 
