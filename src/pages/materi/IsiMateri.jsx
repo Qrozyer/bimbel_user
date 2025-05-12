@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from '../../utils/api';
 import Swal from 'sweetalert2';
+import { convertToEmbedUrl } from '../../utils/video'; // ⬅️ Tambahkan ini
 
 const IsiMateri = () => {
   const { id } = useParams();
@@ -43,6 +44,8 @@ const IsiMateri = () => {
     return <div style={{ textAlign: 'center', marginTop: '60px' }}>Memuat materi...</div>;
   }
 
+  const embedUrl = convertToEmbedUrl(materi.MateriVideo);
+
   return (
     <div
       style={{
@@ -82,6 +85,23 @@ const IsiMateri = () => {
         dangerouslySetInnerHTML={{ __html: materi.MateriIsi }}
       />
 
+      {/* Materi Video */}
+      {embedUrl ? (
+        <div className="mt-4">
+          <h5>Video Materi:</h5>
+          <div className="ratio ratio-16x9 mt-2">
+            <iframe
+              src={embedUrl}
+              title="Video Materi"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      ) : (
+        <p className="mt-4"><strong>Video:</strong> Tidak tersedia</p>
+      )}
+
       {/* Tombol selesai */}
       {!isCompleted && (
         <button
@@ -96,7 +116,7 @@ const IsiMateri = () => {
       {isCompleted && (
         <button
           className="btn btn-primary mt-4 ms-2"
-          onClick={() => navigate(`/ujian-materi/${id}`)}  // Sesuaikan dengan rute ujian Anda
+          onClick={() => navigate(`/ujian-materi/${id}`)}
         >
           Mulai Ujian
         </button>

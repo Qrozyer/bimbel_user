@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { addData } from '../utils/api'; // Fungsi addData yang sudah kamu buat
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import { addData } from '../utils/api';
+import Swal from 'sweetalert2';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const MateriUjian = ({ questions }) => {
-  const {materiId} = useParams();
+  const { materiId } = useParams();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [lastQuestionAnswered, setLastQuestionAnswered] = useState(false);
   const navigate = useNavigate();
 
-  // Mengambil PesertaId dari sessionStorage
   const storedPeserta = JSON.parse(sessionStorage.getItem('peserta'));
   const pesertaId = storedPeserta ? storedPeserta.PesertaId : null;
-
-  console.log('PesertaId:', pesertaId); // Debugging PesertaId
 
   if (!pesertaId) {
     return (
@@ -24,8 +22,16 @@ const MateriUjian = ({ questions }) => {
     );
   }
 
-  // Handle klik tombol jawab
-  const handleAnswer = async () => {
+  if (!questions || questions.length === 0) {
+    return <div className="alert alert-warning mt-3">Soal belum tersedia.</div>;
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+  if (!currentQuestion) {
+    return <div className="alert alert-warning mt-3">Soal tidak ditemukan.</div>;
+  }
+
+  const handleAnswer = () => {
     if (!selectedOption) {
       Swal.fire({
         icon: 'error',
@@ -35,38 +41,48 @@ const MateriUjian = ({ questions }) => {
       return;
     }
 
-    const currentQuestion = questions[currentQuestionIndex];
+    const alreadyAnswered = answers.find(
+      (a) => a.MsId === currentQuestion.MsId
+    );
 
-    // Menyimpan jawaban yang dipilih ke state answers (menggunakan huruf A, B, C, D, E)
-    setAnswers((prevAnswers) => [
-      ...prevAnswers,
-      {
-        MsId: currentQuestion.MsId,        
-        PesertaId: pesertaId, // Menggunakan PesertaId dari sessionStorage
-        Jawaban: selectedOption, // Menyimpan alfabet (A, B, C, D, E)
-      },
-    ]);
+    let updatedAnswers;
+    if (alreadyAnswered) {
+      updatedAnswers = answers.map((a) =>
+        a.MsId === currentQuestion.MsId
+          ? { ...a, Jawaban: selectedOption }
+          : a
+      );
+    } else {
+      updatedAnswers = [
+        ...answers,
+        {
+          MsId: currentQuestion.MsId,
+          PesertaId: pesertaId,
+          Jawaban: selectedOption,
+        },
+      ];
+    }
 
-    // Melanjutkan ke soal berikutnya
+    setAnswers(updatedAnswers);
+
     if (currentQuestionIndex < questions.length - 1) {
-      setSelectedOption(null); // Reset pilihan
-      setCurrentQuestionIndex(currentQuestionIndex + 1); // Pindah ke soal berikutnya
+      setSelectedOption(null);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      setLastQuestionAnswered(true);
     }
   };
 
-  // Menyelesaikan ujian dan mengirim jawaban ke API
   const handleFinishQuiz = async () => {
     if (answers.length === questions.length) {
-      // Kirim data jawaban ke API secara batch
       const response = await addData('ujian/materi/bundle', answers);
-      
       if (response) {
         Swal.fire({
           icon: 'success',
           title: 'Ujian selesai!',
           text: 'Jawaban Anda berhasil disimpan!',
         }).then(() => {
-          navigate(`/hasil-materi/${materiId}/${pesertaId}`); // Redirect ke halaman hasil ujian
+          navigate(`/hasil-materi/${materiId}/${pesertaId}`);
         });
       } else {
         Swal.fire({
@@ -84,13 +100,18 @@ const MateriUjian = ({ questions }) => {
     }
   };
 
-  // Mengambil soal yang sedang aktif
-  const currentQuestion = questions[currentQuestionIndex];
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      const previousIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(previousIndex);
 
-  // Jika tidak ada soal, tampilkan pesan
-  if (!currentQuestion) {
-    return <div>Loading or No questions available</div>;
-  }
+      const prevQuestion = questions[previousIndex];
+      const prevAnswer = answers.find((a) => a.MsId === prevQuestion.MsId);
+      setSelectedOption(prevAnswer ? prevAnswer.Jawaban : null);
+    }
+  };
+
+  const currentAnswer = answers.find((a) => a.MsId === currentQuestion.MsId);
 
   return (
     <div className="card mt-3">
@@ -104,30 +125,37 @@ const MateriUjian = ({ questions }) => {
               className="form-check-input"
               name="answer"
               id={`option-${index}`}
-              value={currentQuestion[`Opsi${option}`]} // Menampilkan value opsi yang sesuai
-              onChange={() => setSelectedOption(option)} // Menyimpan opsi yang dipilih (A, B, C, D, E)
-              checked={selectedOption === option} // Menandai opsi terpilih
+              value={currentQuestion[`Opsi${option}`]}
+              onChange={() => setSelectedOption(option)}
+              checked={selectedOption === option}
             />
-            <label className="form-check-label" htmlFor={`option-${index}`} dangerouslySetInnerHTML={{ __html: currentQuestion[`Opsi${option}`]}}>
-            </label>
+            <label
+              className="form-check-label"
+              htmlFor={`option-${index}`}
+              dangerouslySetInnerHTML={{
+                __html: currentQuestion[`Opsi${option}`],
+              }}
+            />
           </div>
         ))}
-        <button
-          onClick={handleAnswer}
-          className="btn btn-primary mt-3"
-        >
-          Jawab
-        </button>
 
-        {/* Tombol untuk menyelesaikan ujian */}
-        {currentQuestionIndex === questions.length - 1 && (
-          <button
-            onClick={handleFinishQuiz}
-            className="btn btn-success mt-3"
-          >
-            Selesaikan Ujian
+        <div className="mt-3">
+          <button onClick={handleAnswer} className="btn btn-primary me-2">
+            Jawab
           </button>
-        )}
+
+          {currentQuestionIndex > 0 && (
+            <button onClick={handlePrevious} className="btn btn-secondary me-2">
+              Sebelumnya
+            </button>
+          )}
+
+          {lastQuestionAnswered && (
+            <button onClick={handleFinishQuiz} className="btn btn-success">
+              Selesaikan Ujian
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
