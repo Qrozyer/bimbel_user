@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setPeserta } from '../reducers/pesertaSlice'; // Impor setPeserta untuk menyimpan data ke Redux
+import { setPeserta } from '../reducers/pesertaSlice';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const USER = process.env.REACT_APP_USER;
@@ -15,13 +15,23 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const storedPeserta = localStorage.getItem('peserta') || sessionStorage.getItem('peserta');
+    if (storedToken && storedPeserta) {
+      dispatch(setPeserta(JSON.parse(storedPeserta)));
+      navigate('/');
+    }
+  }, [navigate, dispatch]);
+
+  useEffect(() => {
     const fetchToken = async () => {
       try {
-        // Mengirim request GET untuk mengambil token
         const res = await axios.get(`${baseURL}/token`, {
           headers: {
             'Content-Type': 'application/json',
@@ -39,78 +49,73 @@ function Login() {
     fetchToken();
   }, []);
 
-  // Login page
-const handleLogin = async (e) => {
-  e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  // Pastikan token sudah ada sebelum melanjutkan
-  if (!token) {
-    toast.error('Token belum tersedia!');
-    return;
-  }
-
-  try {
-    // Mengirim request POST ke /login/peserta dengan header Authorization berisi token
-    const res = await axios.post(`${baseURL}/login/peserta`, {
-      PesertaEmail: email,
-      PesertaPassword: password,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Menggunakan token dengan "Bearer"
-        'Content-Type': 'application/json', // Menambahkan Content-Type
-        'Accept': 'application/json', // Menambahkan Accept header
-      }
-    });
-
-    // Tampilkan pesan dari response
-    toast.success(res.data.message || 'Login berhasil!');
-    sessionStorage.setItem('token', token);
-
-    // Simpan data peserta ke sessionStorage setelah login berhasil
-    if (res.data) {
-      console.log('Peserta ditemukan:', res.data);  // Debug pesertaa
-      sessionStorage.setItem('peserta', JSON.stringify(res.data)); // Menyimpan data peserta ke sessionStorage
-    } else {
-      console.warn('Peserta tidak ditemukan di response:', res.data);
+    if (!token) {
+      toast.error('Token belum tersedia!');
+      return;
     }
 
-    navigate('/'); // Redirect ke halaman utama setelah login
-  } catch (error) {
-    const msg = error.response?.data?.message || 'Login gagal!';
-    toast.error(msg);
-  }
-};
+    try {
+      const res = await axios.post(`${baseURL}/login/peserta`, {
+        PesertaEmail: email,
+        PesertaPassword: password,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
+      });
 
-  
+      toast.success(res.data.message || 'Login berhasil!');
+      const pesertaData = res.data;
+      const storage = rememberMe ? localStorage : sessionStorage;
+      storage.setItem('token', token);
+      storage.setItem('peserta', JSON.stringify({ peserta: pesertaData }));
+      dispatch(setPeserta({ peserta: pesertaData }));
+
+      if (password === 'admin') {
+        navigate('/ganti-password');
+      } else {
+        navigate('/');
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || 'Login gagal!';
+      toast.error(msg);
+    }
+  };
 
   return (
     <div className="hold-transition login-page">
       <div className="login-box">
         <div className="card card-outline card-primary">
           <div className="card-header text-center">
-            <p className="h1">Bimbel ByPASS</p>
+            <p className="h1">Bimbel Kebidanan</p>
           </div>
           <div className="card-body">
             <p className="login-box-msg">Login With Your Account</p>
             <form onSubmit={handleLogin}>
               <div className="input-group mb-3">
                 <input
-                  type="text"
+                  type="email"
                   className="form-control"
-                  placeholder="email"
+                  placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-user" />
+                    <i className="fas fa-envelope"></i>
                   </div>
                 </div>
               </div>
+
               <div className="input-group mb-3">
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   className="form-control"
                   placeholder="Password"
                   value={password}
@@ -119,14 +124,25 @@ const handleLogin = async (e) => {
                 />
                 <div className="input-group-append">
                   <div className="input-group-text">
-                    <span className="fas fa-lock" />
+                    <i
+                      className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setShowPassword(!showPassword)}
+                      title={showPassword ? "Sembunyikan Password" : "Lihat Password"}
+                    />
                   </div>
                 </div>
               </div>
+
               <div className="row">
                 <div className="col-8">
                   <div className="icheck-primary">
-                    <input type="checkbox" id="remember" />
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />
                     <label htmlFor="remember">Remember Me</label>
                   </div>
                 </div>

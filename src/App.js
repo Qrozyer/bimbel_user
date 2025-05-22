@@ -16,6 +16,7 @@ import NotFound from './components/NotFound';
 
 
 import Login from './pages/Login';
+import GantiPassword from './pages/GantiPassword';
 import BidangPage from './pages/bidang/Bidang';
 import SubBidangPage from './pages/subBidang/subBidang';
 import MateriPage from './pages/materi/Materi';
@@ -39,6 +40,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="/ganti-password" element={<GantiPassword />} />
           <Route path="/bidang" element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />

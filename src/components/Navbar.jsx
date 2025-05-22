@@ -6,6 +6,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Menghapus data peserta dan token dari sessionStorage
+    localStorage.removeItem('peserta')
+    localStorage.removeItem('token')
     sessionStorage.removeItem('peserta'); 
     sessionStorage.removeItem('token');
     
