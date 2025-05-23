@@ -70,6 +70,8 @@ function Login() {
       });
 
       toast.success(res.data.message || 'Login berhasil!');
+
+      console.log("res: ", res);
       const pesertaData = res.data;
       const storage = rememberMe ? localStorage : sessionStorage;
       storage.setItem('token', token);

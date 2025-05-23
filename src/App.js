@@ -36,11 +36,11 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/login" element={<Login />} />
+          <Route path="/ganti-password" element={<GantiPassword />} />  
 
         <Route element={<PrivateRoute />}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/ganti-password" element={<GantiPassword />} />
           <Route path="/bidang" element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />
