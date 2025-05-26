@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setPeserta } from '../reducers/pesertaSlice';
+import './Login.css';
 
 const baseURL = process.env.REACT_APP_BASE_URL;
 const USER = process.env.REACT_APP_USER;
@@ -17,18 +18,29 @@ function Login() {
   const [token, setToken] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Cek jika sudah login
   useEffect(() => {
     const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
-    const storedPeserta = localStorage.getItem('peserta') || sessionStorage.getItem('peserta');
-    if (storedToken && storedPeserta) {
-      dispatch(setPeserta(JSON.parse(storedPeserta)));
-      navigate('/');
-    }
-  }, [navigate, dispatch]);
+    const storedPesertaString = localStorage.getItem('peserta') || sessionStorage.getItem('peserta');
 
+    if (storedToken && storedPesertaString) {
+      const storedPeserta = JSON.parse(storedPesertaString);
+
+      if (storedPeserta?.peserta?.isDefaultPassword === true) {
+        navigate('/ganti-password', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+
+    setCheckingSession(false); // Setelah pengecekan selesai
+  }, [navigate]);
+
+  // Ambil token akses
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -65,23 +77,30 @@ function Login() {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         }
       });
 
       toast.success(res.data.message || 'Login berhasil!');
 
-      console.log("res: ", res);
-      const pesertaData = res.data;
+      const isDefaultPassword = password.trim() === 'user';
+
+      const pesertaData = {
+        ...res.data,
+        isDefaultPassword,
+      };
+
       const storage = rememberMe ? localStorage : sessionStorage;
+
       storage.setItem('token', token);
       storage.setItem('peserta', JSON.stringify({ peserta: pesertaData }));
+
       dispatch(setPeserta({ peserta: pesertaData }));
 
-      if (password === 'admin') {
-        navigate('/ganti-password');
+      if (isDefaultPassword) {
+        navigate('/ganti-password', { replace: true });
       } else {
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (error) {
       const msg = error.response?.data?.message || 'Login gagal!';
@@ -89,75 +108,60 @@ function Login() {
     }
   };
 
+  if (checkingSession) return null; // Hindari render sementara cek session
+
   return (
-    <div className="hold-transition login-page">
-      <div className="login-box">
-        <div className="card card-outline card-primary">
-          <div className="card-header text-center">
-            <p className="h1">Bimbel Kebidanan</p>
+    <div className="login-container">
+      <div className="login-left">
+        <h2>Bimbel Kebidanan</h2>
+        <p>Masuk ke akun Anda untuk melanjutkan ke sistem pembelajaran kami.</p>
+      </div>
+      <div className="login-right">
+        <h2>Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="input-group">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
-          <div className="card-body">
-            <p className="login-box-msg">Login With Your Account</p>
-            <form onSubmit={handleLogin}>
-              <div className="input-group mb-3">
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <i className="fas fa-envelope"></i>
-                  </div>
-                </div>
-              </div>
 
-              <div className="input-group mb-3">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className="form-control"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div className="input-group-append">
-                  <div className="input-group-text">
-                    <i
-                      className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => setShowPassword(!showPassword)}
-                      title={showPassword ? "Sembunyikan Password" : "Lihat Password"}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-8">
-                  <div className="icheck-primary">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <label htmlFor="remember">Remember Me</label>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <button type="submit" className="btn btn-primary btn-block">Sign In</button>
-                </div>
-              </div>
-            </form>
-            <p className="mb-1">
-              <a href="#">I forgot my password</a>
-            </p>
+          <div className="input-group">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Sembunyikan Password" : "Lihat Password"}
+            >
+              <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+            </span>
           </div>
-        </div>
+
+          <div className="remember-me">
+            <input
+              type="checkbox"
+              id="remember"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+            />
+            <label htmlFor="remember">Remember Me</label>
+          </div>
+
+          <button type="submit" className="submit-button">Masuk</button>
+
+          <div className="forgot-link">
+            <a href="#">Lupa password?</a>
+          </div>
+        </form>
       </div>
     </div>
   );
