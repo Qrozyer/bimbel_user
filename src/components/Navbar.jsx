@@ -1,6 +1,5 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
-import { Bell, UserCircle, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,29 +7,68 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('peserta');
     localStorage.removeItem('token');
-    sessionStorage.removeItem('peserta');
+    sessionStorage.removeItem('peserta'); 
     sessionStorage.removeItem('token');
     navigate('/login');
   };
 
   return (
-    <nav className="w-full h-16 bg-white shadow-sm flex items-center justify-between px-6">
-      {/* Brand Name */}
-      <div className="text-xl font-semibold text-[#20b486] tracking-wide">
-        Bimbel Kebidanan
-      </div>
-
-      {/* Icons */}
-      <div className="flex items-center gap-6">
-        <button className="text-gray-600 hover:text-[#20b486] transition">
-          <Bell size={22} />
+    <nav
+      className="navbar navbar-expand-lg"
+      style={{ backgroundColor: '#20b486' }}
+    >
+      <div className="container-fluid">
+        <Link
+          className="navbar-brand text-white fw-bold"
+          to="/"
+          style={{ letterSpacing: '1.2px', fontSize: '1.5rem' }}
+        >
+          Bimbel Kebidanan
+        </Link>
+        <button
+          className="navbar-toggler border-white"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
         </button>
-        <button className="text-gray-600 hover:text-[#20b486] transition" onClick={() => navigate('/profil')}>
-          <UserCircle size={22} />
-        </button>
-        <button className="text-gray-600 hover:text-red-500 transition" onClick={handleLogout}>
-          <LogOut size={22} />
-        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto align-items-center">
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-semibold" aria-current="page" to="/">
+                Beranda
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-semibold" to="/bidang">
+                Materi
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-semibold" to="/ujian">
+                Ujian
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white fw-semibold" to="/profil">
+                Profil
+              </Link>
+            </li>
+            <li className="nav-item">
+              <button
+                className="nav-link btn btn-link text-white fw-semibold d-flex align-items-center"
+                onClick={handleLogout}
+                style={{ textDecoration: 'none', gap: '6px' }}
+              >
+                <i className="fas fa-sign-out-alt"></i>                
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
