@@ -1,0 +1,149 @@
+.profil-container {
+  display: flex;
+  height: 80vh;
+  margin: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profil-left {
+  background: #20b486;
+  color: white;
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profil-left h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.profil-left p {
+  font-size: 1rem;
+}
+
+.profil-right {
+  background: #fff;
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profil-right p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Table profil */
+.profil-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.65rem; 
+}
+
+.profil-table td {
+  padding: 5px; 
+  vertical-align: top;
+  color: #333;
+}
+
+.profil-table td:first-child {
+  width: 160px;
+  font-weight: 600;
+  color: #555;
+}
+
+.profil-table td:nth-child(2) {
+  width: 10px;
+}
+
+/* Tombol Edit */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  font-weight: 500;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Card informasi peserta */
+.profil-card {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+/* Header dan body card */
+.card-header {
+  background-color: rgba(32, 180, 134, 0.9);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-header h4 {
+  margin: 0;
+  color: white;
+  text-align: center;
+}
+
+.card-body {
+  padding: 1.5rem;
+  color: white;
+}
+
+/* Tombol edit di bawah card */
+.text-end {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profil-container {
+    flex-direction: column;
+    height: auto;
+    margin: 1rem;
+  }
+
+  .profil-left,
+  .profil-right {
+    padding: 2rem;
+  }
+
+  .profil-card {
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,44 @@
+.ep-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.ep-card {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: #fff;
+}
+
+.ep-card-header {
+  background-color: #20b486;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  text-align: center;
+  font-weight: 600;
+}
+
+.ep-btn-success {
+  background-color: #20b486 !important;
+  border-color: #20b486 !important;
+  color: #fff !important;
+}
+
+.ep-btn-success:hover {
+  background-color: #169a6e !important;
+}
+
+.ep-loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.1rem;
+  color: #666;
+}

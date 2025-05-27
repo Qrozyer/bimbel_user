@@ -18,29 +18,19 @@ function Login() {
   const [token, setToken] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [checkingSession, setCheckingSession] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Cek jika sudah login
   useEffect(() => {
-    const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
-    const storedPesertaString = localStorage.getItem('peserta') || sessionStorage.getItem('peserta');
-
-    if (storedToken && storedPesertaString) {
-      const storedPeserta = JSON.parse(storedPesertaString);
-
-      if (storedPeserta?.peserta?.isDefaultPassword === true) {
-        navigate('/ganti-password', { replace: true });
-      } else {
-        navigate('/', { replace: true });
-      }
+    const stored = localStorage.getItem('peserta') || sessionStorage.getItem('peserta');
+    const parsed = stored ? JSON.parse(stored)?.peserta : null;
+    if (parsed) {
+      navigate('/');
+    } else {
+      setPeserta(parsed);
     }
-
-    setCheckingSession(false); // Setelah pengecekan selesai
   }, [navigate]);
 
-  // Ambil token akses
   useEffect(() => {
     const fetchToken = async () => {
       try {
@@ -107,8 +97,6 @@ function Login() {
       toast.error(msg);
     }
   };
-
-  if (checkingSession) return null; // Hindari render sementara cek session
 
   return (
     <div className="login-container">

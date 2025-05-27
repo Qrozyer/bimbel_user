@@ -27,6 +27,7 @@ import UjianSoal from './pages/ujian/UjianSoal';
 import HasilUjian from './pages/ujian/HasilUjian';
 import UjianMateri from './pages/materi/UjianMateri';
 import HasilUjianMateri from './pages/materi/HasilUjianMateri';
+import EditProfilPesertaPage from './pages/profile/EditProfilPesertaPage';
 
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/isi-materi/:id" element={<IsiMateri />} />
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
+          <Route path="/profil/edit" element={<EditProfilPesertaPage />} />
           <Route path="/ujian-soal/:sectionId" element={<UjianSoal />} />
           <Route path="/hasil-ujian/:sectionId/:pesertaId" element={<HasilUjian />} />  
           <Route path="/ujian-materi/:materiId" element={<UjianMateri />} />
