@@ -1,56 +1,49 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
+import Sidebar from './Sidebar';
 import Footer from './Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   return (
-    <>
-      <style>
-        {`
-          html, body, #root {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-          }
-          .wrapper {
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-          }
-          .content-wrapper {
-            flex: 1;
-            background-color: #f4f6f9;
-          }
-        `}
-      </style>
-
-      <div className="wrapper">
-        <Navbar />
-
-        <div className="content-wrapper">
-          <section className="content">
-            <div className="container-fluid pt-3">
-              <Outlet />
-            </div>
-          </section>
-        </div>
-
-        <Footer />
-        <ToastContainer
-  position="top-right"
-  autoClose={3000}
-  hideProgressBar={false}
-  closeOnClick
-  pauseOnHover
-  draggable
-  pauseOnFocusLoss
-  theme="colored"
-/>
+    <div className="d-flex min-vh-100">
+      {/* Sidebar di kiri */}
+      <div className="d-none d-md-block bg-gray-100" style={{ width: '300px'}}>
+        <Sidebar />
       </div>
-    </>
+
+      {/* Area utama: Navbar di atas konten, Footer di bawah konten */}
+      <div className="d-flex flex-column flex-grow-1" style={{ minHeight: '100vh' }}>
+        {/* Navbar */}
+        <header>
+          <Navbar />
+        </header>
+
+        {/* Konten utama */}
+        <main className="flex-grow-1 overflow-auto p-4 bg-gray-100">
+          <Outlet />
+        </main>
+
+        {/* Footer */}
+        <footer className="text-center">
+          <Footer />
+        </footer>
+      </div>
+
+      {/* Toast */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        pauseOnFocusLoss
+        theme="colored"
+      />
+    </div>
   );
 };
 

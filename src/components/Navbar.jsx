@@ -1,8 +1,27 @@
-import React from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { FaBell, FaUserCircle, FaSignOutAlt, FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+
+  // State untuk tanggal & waktu realtime
+  const [dateTime, setDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setDateTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format hari, tanggal, waktu
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const dayName = days[dateTime.getDay()];
+  const dateString = dateTime.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  const timeString = dateTime.toLocaleTimeString('id-ID');
 
   const handleLogout = () => {
     localStorage.removeItem('peserta');
@@ -14,61 +33,54 @@ const Navbar = () => {
 
   return (
     <nav
-      className="navbar navbar-expand-lg"
-      style={{ backgroundColor: '#20b486' }}
+      className="bg-gray-100"
+      style={{
+        padding: '1rem 1rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        boxShadow: 'none',        
+        color: '#333',
+      }}
     >
-      <div className="container-fluid">
-        <Link
-          className="navbar-brand text-white fw-bold"
-          to="/"
-          style={{ letterSpacing: '1.2px', fontSize: '1.5rem' }}
-        >
-          Bimbel Kebidanan
-        </Link>
+      {/* Kiri: Hari, tanggal, waktu */}
+      <div style={{ fontWeight: '600', fontSize: '1rem' }}>
+        {`${dayName}, ${dateString} — ${timeString}`}
+      </div>
+
+      {/* Kanan: icon home, notif, profil, logout */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '1.3rem' }}>
         <button
-          className="navbar-toggler border-white"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          aria-label="Beranda"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
+          onClick={() => navigate('/')}
         >
-          <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
+          <FaHome />
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto align-items-center">
-            <li className="nav-item">
-              <Link className="nav-link text-white fw-semibold" aria-current="page" to="/">
-                Beranda
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white fw-semibold" to="/bidang">
-                Materi
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white fw-semibold" to="/ujian">
-                Ujian
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-white fw-semibold" to="/profil">
-                Profil
-              </Link>
-            </li>
-            <li className="nav-item">
-              <button
-                className="nav-link btn btn-link text-white fw-semibold d-flex align-items-center"
-                onClick={handleLogout}
-                style={{ textDecoration: 'none', gap: '6px' }}
-              >
-                <i className="fas fa-sign-out-alt"></i>                
-              </button>
-            </li>
-          </ul>
-        </div>
+
+        <button
+          aria-label="Notifikasi"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
+          onClick={() => alert('Fitur notifikasi belum ada')}
+        >
+          <FaBell />
+        </button>
+
+        <button
+          aria-label="Profil"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
+          onClick={() => navigate('/profil')}
+        >
+          <FaUserCircle />
+        </button>
+
+        <button
+          aria-label="Logout"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
+          onClick={handleLogout}
+        >
+          <FaSignOutAlt />
+        </button>
       </div>
     </nav>
   );
