@@ -149,9 +149,9 @@ function GantiPassword() {
             Simpan Password
           </button>
         </form>
-        <p className="back-login mt-3">
-          <button className="btn btn-link" onClick={handleLewati}>Lewati</button>
-        </p>
+        <h1 className="back-login mt-3">
+          <button className="btn btn-link" style={{ fontSize: '30px' }} onClick={handleLewati}>Lewati</button>
+        </h1>
       </div>
     </div>
   );

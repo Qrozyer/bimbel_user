@@ -11,8 +11,8 @@ const MateriUjian = ({ questions }) => {
   const [lastQuestionAnswered, setLastQuestionAnswered] = useState(false);
   const navigate = useNavigate();
 
-  const storedPeserta = JSON.parse(sessionStorage.getItem('peserta'));
-  const pesertaId = storedPeserta ? storedPeserta.PesertaId : null;
+  const storedPeserta = JSON.parse(sessionStorage.getItem('peserta')) || JSON.parse(localStorage.getItem('peserta'))  
+  const pesertaId = storedPeserta ? storedPeserta.peserta.PesertaId : null;
 
   if (!pesertaId) {
     return (

@@ -6,11 +6,11 @@ import { setDurasi } from '../../reducers/ujianSlice'; // Mengimpor action setDu
 
 const UjianPage = () => {
   const navigate = useNavigate();
-  const { ujianid } = useParams(); // Mengambil ujianid dari URL
+  const { ujianid } = useParams(); 
   const [ujianData, setUjianData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isActive, setIsActive] = useState(false); // Status ujian aktif atau tidak
-  const dispatch = useDispatch(); // Menginisialisasi dispatch Redux
+  const [isActive, setIsActive] = useState(false);
+  const dispatch = useDispatch(); 
 
   const handleStartQuiz = (sectionId) => {
     navigate(`/ujian-soal/${sectionId}`);

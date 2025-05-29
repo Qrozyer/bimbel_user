@@ -1,41 +1,43 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';  // Mengimpor useNavigate
+import { useNavigate } from 'react-router-dom';
+import './DaftarBidang.css';
+import m1 from '../assets/images/m1.jpg';
+import m2 from '../assets/images/m2.jpg';
+import m3 from '../assets/images/m3.jpg';
+import m4 from '../assets/images/m4.jpg';
+import m5 from '../assets/images/m5.jpg';
+import m6 from '../assets/images/m6.jpg';
+
+const images = [m1, m2, m3, m4, m5, m6];
 
 const DaftarBidang = ({ data }) => {
-  const navigate = useNavigate(); // Menyiapkan navigasi untuk pindah ke halaman sub bidang
+  const navigate = useNavigate();
 
-  if (!data || !Array.isArray(data)) { 
-    return <div>Data kosong</div>; // Atau tampilkan pesan lain
+  if (!data || !Array.isArray(data)) {
+    return <div>Data kosong</div>;
   }
-  
-  // Fungsi untuk mengarahkan ke halaman Sub Bidang
+
   const handleCardClick = (bidangId) => {
-    navigate(`/sub-bidang/${bidangId}`); // Mengarahkan ke halaman Sub Bidang berdasarkan BidangId
+    navigate(`/sub-bidang/${bidangId}`);
   };
 
   return (
-    <div className="container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+    <div className="bidang-grid">
       {data.map((item, index) => (
-        <div 
-          key={item.BidangId} 
-          style={{
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            padding: '15px',
-            width: '250px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            backgroundColor: '#ffeb3b',  // Warna latar belakang cerah kuning
-            cursor: 'pointer',  // Menambahkan cursor pointer agar pengguna tahu bahwa ini bisa diklik
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',  // Efek transisi
-          }}
-          onClick={() => handleCardClick(item.BidangId)}  // Menambahkan onClick untuk navigasi
-          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} // Efek saat hover
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'} // Kembali ke ukuran semula
+        <div
+          key={item.BidangId}
+          className="bidang-card"
+          onClick={() => handleCardClick(item.BidangId)}
         >
-          <div>
-            <strong>{item.BidangNama}</strong>
+          <img
+            src={images[index % images.length]}
+            alt={item.BidangNama}
+            className="bidang-image"
+          />
+          <div className="bidang-content">
+            <h4>{item.BidangNama}</h4>
+            <p>{item.BidangDeskripsi || 'Deskripsi tidak tersedia'}</p>
           </div>
-          <div dangerouslySetInnerHTML={{ __html: item.BidangKeterangan }}></div>
         </div>
       ))}
     </div>

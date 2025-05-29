@@ -7,11 +7,8 @@ const Sidebar = () => {
 
   const menuItems = [
     { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/' },
-    { label: 'Bidang', icon: <FaBriefcase />, path: '/bidang-list' },
-    { label: 'Sub Bidang', icon: <FaSitemap />, path: '/sub-bidang' },
-    { label: 'Materi', icon: <FaBook />, path: '/materi' },
-    { label: 'Ujian', icon: <FaClipboardList />, path: '/ujian' },
-    { label: 'Hasil Ujian', icon: <FaFileAlt />, path: '/laporan-ujian' },
+    { label: 'Materi', icon: <FaBook />, path: '/bidang' },
+    { label: 'Ujian', icon: <FaClipboardList />, path: '/ujian' },    
     { label: 'Profil', icon: <FaUserCircle />, path: '/profil' },
     { label: 'Logout', icon: <FaSignOutAlt />, path: '/logout' },
   ];

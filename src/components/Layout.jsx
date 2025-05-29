@@ -22,12 +22,12 @@ const Layout = () => {
         </header>
 
         {/* Konten utama */}
-        <main className="flex-grow-1 overflow-auto p-4 bg-gray-100">
+        <main className="flex-grow-1 overflow-auto p-4 pb-5 bg-gray-100">
           <Outlet />
         </main>
 
         {/* Footer */}
-        <footer className="text-center">
+        <footer className="text-center bg-gray-100">
           <Footer />
         </footer>
       </div>

@@ -35,7 +35,10 @@ const Navbar = () => {
     <nav
       className="bg-gray-100"
       style={{
-        padding: '1rem 1rem',
+        paddingTop: '1.5rem',        
+        paddingLeft: '2rem',
+        paddingRight: '2rem',
+        position: 'sticky',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',

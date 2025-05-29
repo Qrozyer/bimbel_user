@@ -17,11 +17,14 @@ import NotFound from './components/NotFound';
 
 import Login from './pages/Login';
 import GantiPassword from './pages/GantiPassword';
+import Logout from './pages/Logout';
+
 import BidangPage from './pages/bidang/Bidang';
 import SubBidangPage from './pages/subBidang/subBidang';
 import MateriPage from './pages/materi/Materi';
 import IsiMateri from './pages/materi/IsiMateri';
 import ProfilPeserta from './pages/profile/Profil';
+import UjianSectionList from './pages/ujian/UjianSection';
 import UjianPage from './pages/ujian/Ujian';
 import UjianSoal from './pages/ujian/UjianSoal';
 import HasilUjian from './pages/ujian/HasilUjian';
@@ -37,6 +40,7 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/ganti-password" element={<GantiPassword />} />  
@@ -46,6 +50,7 @@ const App = () => {
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />
           <Route path="/isi-materi/:id" element={<IsiMateri />} />
+          <Route path="/ujian" element={<UjianSectionList />} />
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
           <Route path="/profil/edit" element={<EditProfilPesertaPage />} />

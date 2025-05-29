@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchData } from '../../utils/api';
 import Swal from 'sweetalert2';
-import { convertToEmbedUrl } from '../../utils/video'; // ⬅️ Tambahkan ini
+import { convertToEmbedUrl } from '../../utils/video';
 
 const IsiMateri = () => {
   const { id } = useParams();
   const [materi, setMateri] = useState(null);
-  const [isCompleted, setIsCompleted] = useState(false);  // State untuk menandakan materi selesai
+  const [isCompleted, setIsCompleted] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,80 +47,56 @@ const IsiMateri = () => {
   const embedUrl = convertToEmbedUrl(materi.MateriVideo);
 
   return (
-    <div
-      style={{
-        maxWidth: '800px',
-        margin: '40px auto',
-        padding: '30px',
-        backgroundColor: '#fdfdfd',
-        borderRadius: '12px',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-        fontFamily: 'Arial, sans-serif',
-      }}
-    >
-      <button
-        className="btn btn-secondary mb-4"
-        onClick={() => navigate(-1)}
-      >
-        Kembali
-      </button>
+    <div className="container mt-5">
+      {/* Header Buttons */}
+      <div className="d-flex justify-content-start align-items-center mb-3">
+        <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+          <i className='fa fa-arrow-left'></i> Kembali
+        </button>
+        <div>
+          {!isCompleted ? (
+            <button className="btn btn-success ms-2" onClick={handleCompletion}>
+              Selesai
+            </button>
+          ) : (
+            <button className="btn btn-primary ms-2" onClick={() => navigate(`/ujian-materi/${id}`)}>
+              Mulai Ujian
+            </button>
+          )}
+        </div>
+      </div>
 
-      <h2
-        style={{
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          color: '#007bff',
-          marginBottom: '25px',
-        }}
-      >
-        {materi.MateriJudul}
-      </h2>
+      {/* Materi Card */}
+      <div className="card shadow-sm">
+        <div className="card-header text-white" style={{ backgroundColor: '#20B486' }}>
+          <h4 className="mb-0">{materi.MateriJudul}</h4>
+        </div>
+        <div className="card-body">
+          <h5 className='text-secondary'>Isi Materi:</h5>
+          <div
+            className="mb-4"
+            style={{ fontSize: '1.1rem', color: '#333', lineHeight: '1.7' }}
+            dangerouslySetInnerHTML={{ __html: materi.MateriIsi }}
+          />
 
-      <div
-        style={{
-          fontSize: '1.1rem',
-          color: '#333',
-          lineHeight: '1.7',
-        }}
-        dangerouslySetInnerHTML={{ __html: materi.MateriIsi }}
-      />
-
-      {/* Materi Video */}
-      {embedUrl ? (
-        <div className="mt-4">
-          <h5>Video Materi:</h5>
-          <div className="ratio ratio-16x9 mt-2">
-            <iframe
-              src={embedUrl}
-              title="Video Materi"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+          {/* Video Materi */}
+          <div className="mt-4">
+            <h5 className='text-secondary'>Video Materi:</h5>
+            {embedUrl ? (
+              <div className="ratio ratio-16x9 mt-2">
+                <iframe
+                  src={embedUrl}
+                  title="Video Materi"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <p className="text-muted">Tidak tersedia</p>
+            )}
           </div>
         </div>
-      ) : (
-        <p className="mt-4"><strong>Video:</strong> Tidak tersedia</p>
-      )}
-
-      {/* Tombol selesai */}
-      {!isCompleted && (
-        <button
-          className="btn btn-success mt-4"
-          onClick={handleCompletion}
-        >
-          Selesai
-        </button>
-      )}
-
-      {/* Tombol mulai ujian, muncul setelah konfirmasi selesai */}
-      {isCompleted && (
-        <button
-          className="btn btn-primary mt-4 ms-2"
-          onClick={() => navigate(`/ujian-materi/${id}`)}
-        >
-          Mulai Ujian
-        </button>
-      )}
+      </div>
     </div>
   );
 };

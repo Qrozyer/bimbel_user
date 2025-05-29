@@ -45,7 +45,7 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container rounded-2xl shadow-xl m-4 p-6 bg-white">
+    <div className="home-container rounded-2xl shadow-xl p-4 bg-white">
       {/* Greeting Card */}
       <div className="greeting-card">
         <div className="greeting-text">

@@ -13,7 +13,7 @@ const BidangPage = () => {
 
   useEffect(() => {
     const fetchDataBidang = async () => {
-      const data = await fetchData('bidang'); // Tambahkan endpoint 'bidang'
+      const data = await fetchData('bidang');
       if (data) {
         dispatch(setBidang(data));
       }
@@ -22,7 +22,6 @@ const BidangPage = () => {
   }, [dispatch]);
 
 
-  // Jika data kosong, tampilkan keterangan dan tombol kembali
   if (!bidang.length) {
     return (
       <div style={{ margin: '20px auto', padding: '20px', maxWidth: '1200px' }}>
@@ -32,13 +31,24 @@ const BidangPage = () => {
   }
 
   return (
-    <div style={{ margin: '20px auto', padding: '20px', maxWidth: '1200px' }}>
-      <h5 className="p-2 ml-6 mb-4 text-secondary">Pilih Bidang</h5>
-      <DaftarBidang 
-        data={bidang}         
-      />
+  <div style={{ margin: '20px auto', padding: '20px', maxWidth: '1200px' }}>
+    <button
+  className="btn btn-secondary d-flex align-items-center h5 mb-3"
+  style={{ backgroundColor: '#20B486', borderColor: '#20B486' }}
+  onClick={() => navigate(-1)}
+>
+  <i className="fas fa-arrow-left me-2"></i> Kembali
+</button>
+    <div className="card border-0  shadow-sm">
+      <div className="card-header text-white d-flex justify-content-between align-items-center mb-0" style={{ backgroundColor: '#20B486' }}>
+        <h5 className="">Pilih Bidang</h5>
+      </div>
+      <div className="card-body">
+        <DaftarBidang data={bidang} />
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default BidangPage;

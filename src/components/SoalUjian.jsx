@@ -10,7 +10,7 @@ const SoalUjian = ({ questions }) => {
   const [lastQuestionAnswered, setLastQuestionAnswered] = useState(false);
   const navigate = useNavigate();
 
-  const storedPeserta = JSON.parse(sessionStorage.getItem('peserta'));
+  const storedPeserta = JSON.parse(sessionStorage.getItem('peserta')) || JSON.parse(localStorage.getItem('peserta'));
   const pesertaId = storedPeserta ? storedPeserta.PesertaId : null;
 
   if (!pesertaId) {
