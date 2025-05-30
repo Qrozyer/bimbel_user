@@ -11,7 +11,7 @@ import m6 from '../assets/images/m6.jpg';
 
 const images = [m1, m2, m3, m4, m5, m6];
 
-const DaftarBidang = ({ data }) => {
+const DaftarBidangmu = ({ data }) => {
   const [akses, setAkses] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -63,45 +63,30 @@ const DaftarBidang = ({ data }) => {
     navigate('/hubungi-kami');
   };
 
-  if (loading) return <p>Memuat daftar bidang...</p>;
+  if (loading) return <p>Memuat daftar bidangmu...</p>;
+
+  // Filter bidang yang peserta punya akses aktif
+  const bidangYangAktif = data.filter(item => akses[item.BidangId]?.akses);
+
+  if (bidangYangAktif.length === 0) {
+    return <p>Kamu belum memiliki bidang yang tersedia saat ini.</p>;
+  }
 
   return (
     <div className="bidang-grid">
-      {data.map((item, index) => {
-        const info = akses[item.BidangId] || {};
-        const isAktif = info.akses;
+      {bidangYangAktif.map((item, index) => {
         const img = images[index % images.length];
 
         return (
           <div
             key={item.BidangId}
-            className={`bidang-card ${!isAktif ? 'bidang-disabled' : ''}`}
-            onClick={() => {
-              if (isAktif) handleClick(item.BidangId);
-            }}
+            className="bidang-card"
+            onClick={() => handleClick(item.BidangId)}
           >
             <img src={img} alt={item.BidangNama} className="bidang-image" />
-<div className="bidang-content">
-  <h4 className="bidang-nama">{item.BidangNama}</h4>
-  {!isAktif && (
-    <div className="bidang-status">
-      <div className="status-left">
-        <i className="fas fa-lock"></i>
-        <span className="status-text">Tidak tersedia</span>
-      </div>
-      <button
-        className="btn btn-sm btn-outline-success unlock-button"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleUnlockClick();
-        }}
-      >
-        <i className="fas fa-unlock"></i> Unlock
-      </button>
-    </div>
-  )}
-</div>
-
+            <div className="bidang-content">
+              <h4 className="bidang-nama">{item.BidangNama}</h4>
+            </div>
           </div>
         );
       })}
@@ -109,4 +94,4 @@ const DaftarBidang = ({ data }) => {
   );
 };
 
-export default DaftarBidang;
+export default DaftarBidangmu;

@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setBidang } from '../../actions/bidangActions';
 import Swal from 'sweetalert2';
 import { fetchData, deleteData } from '../../utils/api'; 
-import DaftarBidang from '../../components/DaftarBidang';
+import DaftarBidangmu from '../../components/DaftarBidangmu';
 import { useNavigate } from 'react-router-dom'; 
 
-const BidangPage = () => {
+const BidangmuPage = () => {
   const bidang = useSelector((state) => state.bidang.bidang);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,11 +44,11 @@ const BidangPage = () => {
         <h5 className="">Pilih Bidang</h5>
       </div>
       <div className="card-body">
-        <DaftarBidang data={bidang} />
+        <DaftarBidangmu data={bidang} />
       </div>
     </div>
   </div>
 );
 };
 
-export default BidangPage;
+export default BidangmuPage;

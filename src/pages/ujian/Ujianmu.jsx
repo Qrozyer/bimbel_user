@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { fetchData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import './UjianSection.css';
+import './Ujianmu.css';
 
-const UjianSectionList = () => {
-  const [sections, setSections] = useState([]);
+const Ujianmu = () => {
   const [userSections, setUserSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,10 +13,9 @@ const UjianSectionList = () => {
   const pesertaId = peserta?.peserta?.PesertaId;
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadUserSections = async () => {
       try {
         const allSections = await fetchData('ujian/data/section');
-        setSections(allSections);
 
         const pesertaSectionPromises = allSections.map((section) =>
           fetchData(`ujian/peserta/${section.SectionID}`)
@@ -25,27 +23,22 @@ const UjianSectionList = () => {
 
         const pesertaSectionResults = await Promise.all(pesertaSectionPromises);
 
-        const userSectionIds = pesertaSectionResults.flatMap((data, index) => {
-          if (!Array.isArray(data)) return [];
-          const found = data.some(
-            (item) => String(item.PesertaId) === String(pesertaId)
-          );
-          return found ? [allSections[index].SectionID] : [];
+        const filteredSections = allSections.filter((section, index) => {
+          const data = pesertaSectionResults[index];
+          if (!Array.isArray(data)) return false;
+          return data.some((item) => String(item.PesertaId) === String(pesertaId));
         });
 
-        setUserSections(userSectionIds);
+        setUserSections(filteredSections);
       } catch (error) {
-        console.error('Gagal memuat data section atau peserta:', error);
+        console.error('Gagal memuat data ujian peserta:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    loadData();
+    loadUserSections();
   }, [pesertaId]);
-
-  const isUserInSection = (section) =>
-    userSections.some((id) => String(id) === String(section.SectionID));
 
   const isActiveSection = (section) => section.Tampil === 1;
 
@@ -61,25 +54,26 @@ const UjianSectionList = () => {
 
       <div className="card border-0 shadow-sm">
         <div className="card-header text-white d-flex justify-content-between align-items-center mb-0" style={{ backgroundColor: '#20B486' }}>
-          <h5 className="mb-0">Daftar Sesi Ujian</h5>
+          <h5 className="mb-0">Ujianmu</h5>
         </div>
 
         <div className="card-body">
           {loading ? (
             <p>Memuat data...</p>
+          ) : userSections.length === 0 ? (
+            <p>Kamu belum memiliki sesi ujian yang tersedia.</p>
           ) : (
             <div className="row">
-              {sections.map((section) => {
-                const userInSection = isUserInSection(section);
+              {userSections.map((section) => {
                 const active = isActiveSection(section);
 
                 return (
                   <div className="col-md-6 mb-4" key={section.SectionID}>
                     <div
-                      className={`card h-100 shadow-sm ${userInSection && active ? '' : 'card-disabled'}`}
+                      className={`card h-100 shadow-sm ${active ? '' : 'card-disabled'}`}
                       style={{
-                        cursor: userInSection && active ? 'pointer' : 'default',
-                        border: userInSection && active ? '1px solid #20B486' : '1px solid #ccc',
+                        cursor: active ? 'pointer' : 'default',
+                        border: active ? '1px solid #20B486' : '1px solid #ccc',
                         transition: 'transform 0.2s',
                       }}
                     >
@@ -119,25 +113,18 @@ const UjianSectionList = () => {
                         </table>
 
                         <div className="d-flex justify-content-between align-items-center mt-3">
-{userInSection && active ? (
-  <button
-    className="btn btn-outline-success"
-    onClick={() => navigate(`/ujian/${section.SectionID}`)}
-  >
-    <i className="fas fa-pencil-alt me-1"></i> Kerjakan
-  </button>
-) : userInSection && !active ? (
-  <button className="btn btn-outline-secondary" disabled>
-    <i className="fas fa-clock me-1"></i> Belum Aktif
-  </button>
-) : (
-  <div className="bidang-status">
-    <i className="fas fa-lock"></i>
-    <span className="ms-1">Tidak tersedia</span>
-  </div>
-)}
-
-
+                          {active ? (
+                            <button
+                              className="btn btn-outline-success"
+                              onClick={() => navigate(`/ujian/${section.SectionID}`)}
+                            >
+                              <i className="fas fa-pencil-alt me-1"></i> Kerjakan
+                            </button>
+                          ) : (
+                            <button className="btn btn-outline-secondary" disabled>
+                              <i className="fas fa-clock me-1"></i> Belum Aktif
+                            </button>
+                          )}
 
                           <span className={`badge fs-6 px-4 py-3 ${active ? 'bg-success' : 'bg-danger'}`}>
                             {active ? 'Aktif' : 'Tidak Aktif'}
@@ -156,4 +143,4 @@ const UjianSectionList = () => {
   );
 };
 
-export default UjianSectionList;
+export default Ujianmu;

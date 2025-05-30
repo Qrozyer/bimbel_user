@@ -1,22 +1,31 @@
 .bidang-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;  
+  gap: 20px;
 }
 
 .bidang-card {
-    background-color: #fff;    
-    border-radius: 16px;    
-    border: 1px solid #e0e0e0;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
+  background-color: #fff;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .bidang-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.bidang-disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .bidang-image {
@@ -27,16 +36,42 @@
 
 .bidang-content {
   padding: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.bidang-content h4 {
+.bidang-nama {
   font-size: 18px;
-  margin-bottom: 8px;
+  font-weight: bold;
+  margin: 0;
   color: #333;
 }
 
-.bidang-content p {
-  font-size: 14px;
-  color: #777;
+.bidang-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #dc3545;
+}
+
+.status-text {
   margin: 0;
+}
+
+.unlock-button {
+  padding: 4px 10px;
+  font-size: 12px;
+  white-space: nowrap;
 }

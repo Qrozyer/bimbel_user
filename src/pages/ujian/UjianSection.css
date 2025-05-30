@@ -1,0 +1,40 @@
+.ujian-section-container {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 1200px;
+}
+
+.card-disabled {
+  opacity: 0.6;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: default;
+}
+
+
+.bidang-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #dc3545;
+  white-space: nowrap;
+}
+
+.bidang-status i {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.table th {
+  font-weight: 600;
+  vertical-align: middle;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+.table th:nth-child(2) {
+  width: 12px;
+  padding: 0;
+}

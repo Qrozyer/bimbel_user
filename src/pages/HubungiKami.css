@@ -1,0 +1,83 @@
+/* Container utama full width dan full height */
+.hubungi-kami-container {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 60px 20px;
+  background-color: #f0f4f8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Heading */
+.hubungi-kami-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 40px;
+}
+
+/* Grid card */
+.contact-boxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Card styling */
+.contact-box {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 30px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: #1f2937;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover efek */
+.contact-box:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  background-color: #10b981; /* hijau toska */
+  color: #ffffff; /* teks putih saat hover */
+}
+
+.contact-box:hover .contact-icon {
+  color: #ffffff;
+}
+
+.contact-icon {
+  font-size: 2.8rem;
+  margin-bottom: 15px;
+  color: #10b981;
+  transition: color 0.3s ease;
+}
+
+/* Heading dalam box */
+.contact-box h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: inherit;
+}
+
+/* Paragraf dalam box */
+.contact-box p {
+  font-size: 0.95rem;
+  color: inherit;
+  line-height: 1.5;
+}
+
+/* Responsive heading */
+@media (max-width: 768px) {
+  .hubungi-kami-container h2 {
+    font-size: 2rem;
+  }
+}
+    

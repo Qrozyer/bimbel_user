@@ -20,6 +20,7 @@ import GantiPassword from './pages/GantiPassword';
 import Logout from './pages/Logout';
 
 import BidangPage from './pages/bidang/Bidang';
+import BidangmuPage from './pages/bidang/Bidangmu';
 import SubBidangPage from './pages/subBidang/subBidang';
 import MateriPage from './pages/materi/Materi';
 import IsiMateri from './pages/materi/IsiMateri';
@@ -29,8 +30,10 @@ import UjianPage from './pages/ujian/Ujian';
 import UjianSoal from './pages/ujian/UjianSoal';
 import HasilUjian from './pages/ujian/HasilUjian';
 import UjianMateri from './pages/materi/UjianMateri';
+import Ujianmu from './pages/ujian/Ujianmu';
 import HasilUjianMateri from './pages/materi/HasilUjianMateri';
 import EditProfilPesertaPage from './pages/profile/EditProfilPesertaPage';
+import HubungiKami from './pages/HubungiKami';
 
 
 const App = () => {
@@ -44,13 +47,16 @@ const App = () => {
 
         <Route element={<PrivateRoute />}>
           <Route path="/ganti-password" element={<GantiPassword />} />  
+          <Route path="/hubungi-kami" element={<HubungiKami />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="/bidang" element={<BidangPage />} />
+          <Route path="/bidangmu" element={<BidangmuPage />} />
+          <Route path="/daftar-bidang" element={<BidangPage />} />
           <Route path="/sub-bidang/:id" element={<SubBidangPage />} />
           <Route path="/materi/:id" element={<MateriPage />} />
           <Route path="/isi-materi/:id" element={<IsiMateri />} />
-          <Route path="/ujian" element={<UjianSectionList />} />
+          <Route path="/ujianmu" element={<Ujianmu />} />
+          <Route path="/daftar-ujian" element={<UjianSectionList />} />
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
           <Route path="/profil/edit" element={<EditProfilPesertaPage />} />

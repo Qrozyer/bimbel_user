@@ -35,10 +35,7 @@ const DaftarMateri = ({ data }) => {
             className="bidang-image"
           />
           <div className="bidang-content">
-            <h4>{item.MateriJudul}</h4>
-            <p>{item.MateriDeskripsi ? (
-              <span dangerouslySetInnerHTML={{ __html: item.MateriDeskripsi }} />
-            ) : 'Deskripsi tidak tersedia'}</p>
+            <h4>{item.MateriJudul}</h4>            
           </div>
         </div>
       ))}

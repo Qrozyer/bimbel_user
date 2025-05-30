@@ -9,19 +9,30 @@ import m4 from '../assets/images/m4.jpg';
 import m5 from '../assets/images/m5.jpg';
 import m6 from '../assets/images/m6.jpg';
 import { fetchData } from '../utils/api';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [materiList, setMateriList] = useState([]);
   const [subBidangList, setSubBidangList] = useState([]);
+  const [totalMateri, setTotalMateri] = useState(0);
+  const [totalUjian, setTotalUjian] = useState(0);
+  const [totalPeserta, setTotalPeserta] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const materiRes = await fetchData('materi');
+        const materiRes = await fetchData('/materi');
         setMateriList(materiRes.slice(0, 6));
+        setTotalMateri(materiRes.length);
 
-        const subBidangRes = await fetchData('sub-bidang');
+        const subBidangRes = await fetchData('/sub-bidang');
         setSubBidangList(subBidangRes);
+
+        const ujianRes = await fetchData('/ujian/data/section');
+        setTotalUjian(ujianRes.length);
+
+        const pesertaRes = await fetchData('/peserta');
+        setTotalPeserta(pesertaRes.length);
       } catch (err) {
         console.error('Gagal mengambil data:', err);
       }
@@ -45,7 +56,7 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container rounded-2xl shadow-xl p-4 bg-white">
+    <div className="home-container rounded-2xl shadow-xl p-5 bg-white">
       {/* Greeting Card */}
       <div className="greeting-card">
         <div className="greeting-text">
@@ -69,7 +80,7 @@ const Home = () => {
           </div>
           <div>
             <p className="label">Total Materi</p>
-            <p className="value">24</p>
+            <p className="value">{totalMateri}</p>
           </div>
         </div>
         <div className="overview-card card-yellow">
@@ -78,7 +89,7 @@ const Home = () => {
           </div>
           <div>
             <p className="label">Total Ujian</p>
-            <p className="value">12</p>
+            <p className="value">{totalUjian}</p>
           </div>
         </div>
         <div className="overview-card card-blue">
@@ -87,7 +98,7 @@ const Home = () => {
           </div>
           <div>
             <p className="label">Total Peserta</p>
-            <p className="value">57</p>
+            <p className="value">{totalPeserta}</p>
           </div>
         </div>
       </div>
@@ -99,7 +110,11 @@ const Home = () => {
 
       <div className="popular-grid">
         {materiList.map((materi, index) => (
-          <div key={materi.MateriId} className="materi-card">
+          <Link
+            to={`/isi-materi/${materi.MateriId}`}
+            key={materi.MateriId}
+            className="materi-card"
+          >
             <img
               src={images[index]}
               alt={materi.MateriJudul}
@@ -109,9 +124,9 @@ const Home = () => {
               <h4>{materi.MateriJudul}</h4>
               <p className="text-muted mb-1">
                 <strong>Sub Bidang:</strong> {getSubNama(materi.SubId)}
-              </p>            
+              </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
