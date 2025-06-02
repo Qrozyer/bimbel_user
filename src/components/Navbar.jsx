@@ -23,14 +23,6 @@ const Navbar = () => {
   });
   const timeString = dateTime.toLocaleTimeString('id-ID');
 
-  const handleLogout = () => {
-    localStorage.removeItem('peserta');
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('peserta'); 
-    sessionStorage.removeItem('token');
-    navigate('/login');
-  };
-
   return (
     <nav
       className="bg-gray-100"
@@ -80,7 +72,7 @@ const Navbar = () => {
         <button
           aria-label="Logout"
           style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
-          onClick={handleLogout}
+          onClick={() => navigate('/logout')}
         >
           <FaSignOutAlt />
         </button>

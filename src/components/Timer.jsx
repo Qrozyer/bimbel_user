@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 const Timer = ({ duration }) => {
-  const [timeLeft, setTimeLeft] = useState(duration); // Durasi dalam detik
+  // konversi menit ke detik
+  const [timeLeft, setTimeLeft] = useState(duration * 60);
 
   useEffect(() => {
     if (timeLeft === 0) return;
+
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prevTime - 1;
+      });
     }, 1000);
 
     return () => clearInterval(timer);
@@ -17,7 +25,9 @@ const Timer = ({ duration }) => {
 
   return (
     <div>
-      <h4>Waktu Tersisa: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}</h4>
+      <h4>
+        Waktu Tersisa: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+      </h4>
     </div>
   );
 };

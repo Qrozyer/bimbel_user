@@ -1,44 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // Mengimpor useSelector untuk mengambil data dari Redux
-import SoalUjian from '../../components/SoalUjian'; // Mengimpor komponen Quiz
-import Timer from '../../components/Timer'; // Mengimpor komponen Timer
-import { fetchData } from '../../utils/api'; // Mengimpor fetchData dari utils/api
+import { useSelector } from 'react-redux';
+import SoalUjian from '../../components/SoalUjian';
+import Timer from '../../components/Timer';
+import { fetchData } from '../../utils/api';
 
 const UjianSoal = () => {
-  const { sectionId } = useParams(); // Mengambil sectionId dari URL
+  const { sectionId } = useParams();
   const [questions, setQuestions] = useState([]);
+  const [sectionName, setSectionName] = useState('');
   const [loading, setLoading] = useState(true);
-  const durasi = useSelector((state) => state.ujian.durasi); // Mengambil durasi dari Redux
+  const durasi = useSelector((state) => state.ujian.durasi);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        // Mengambil soal berdasarkan sectionId
         const response = await fetchData(`ujian/soal/${sectionId}`);
         if (response) {
-          setQuestions(response); // Menyimpan soal ke state
+          setQuestions(response);
         } else {
           console.error('No questions found');
         }
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching questions:', error);
-        setLoading(false);
       }
     };
-    fetchQuestions();
+
+    const fetchSectionName = async () => {
+      try {
+        const sectionResponse = await fetchData(`soal/section/pilih/${sectionId}`);
+        if (sectionResponse && sectionResponse.SectionNama) {
+          setSectionName(sectionResponse.SectionNama);
+        }
+      } catch (error) {
+        console.error('Error fetching section name:', error);
+      }
+    };
+
+    Promise.all([fetchQuestions(), fetchSectionName()]).then(() => {
+      setLoading(false);
+    });
   }, [sectionId]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="container py-4">
-      <h1>Ujian Anda</h1>
-      <Timer duration={durasi} /> {/* Timer untuk ujian menggunakan durasi dari Redux */}
-      <SoalUjian questions={questions} />
+      <div className="card mt-3">
+        <div
+  className="card-header position-relative"
+  style={{ backgroundColor: '#20B486', color: 'white', minHeight: '60px' }}
+>
+  <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
+    <h5 className="mb-0">{sectionName || 'Section'}</h5>
+  </div>
+  <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+    <Timer duration={durasi} />
+  </div>
+</div>
+
+        <div className="card-body">
+          <SoalUjian questions={questions} />
+        </div>
+      </div>
     </div>
   );
 };

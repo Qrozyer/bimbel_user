@@ -1,0 +1,28 @@
+.ujian-section-container {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+}
+
+.card-header {
+  font-weight: 600;
+}
+
+.table th {
+  width: 140px;
+  white-space: nowrap;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.badge.bg-success,
+.badge.bg-danger {
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 12px;
+}

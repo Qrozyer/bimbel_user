@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { addData } from '../utils/api';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 const SoalUjian = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -11,7 +12,7 @@ const SoalUjian = ({ questions }) => {
   const navigate = useNavigate();
 
   const storedPeserta = JSON.parse(sessionStorage.getItem('peserta')) || JSON.parse(localStorage.getItem('peserta'));
-  const pesertaId = storedPeserta ? storedPeserta.PesertaId : null;
+  const pesertaId = storedPeserta ? storedPeserta.peserta.PesertaId : null;
 
   if (!pesertaId) {
     return (
@@ -21,7 +22,7 @@ const SoalUjian = ({ questions }) => {
     );
   }
 
-  const handleAnswer = async () => {
+  const handleAnswer = () => {
     if (!selectedOption) {
       Swal.fire({
         icon: 'error',
@@ -32,22 +33,16 @@ const SoalUjian = ({ questions }) => {
     }
 
     const currentQuestion = questions[currentQuestionIndex];
-
-    // Cek apakah soal ini sudah dijawab sebelumnya
-    const alreadyAnswered = answers.find(
-      (a) => a.Id === currentQuestion.Id
-    );
+    const alreadyAnswered = answers.find((a) => a.Id === currentQuestion.Id);
 
     let updatedAnswers;
     if (alreadyAnswered) {
-      // Update jawaban lama
       updatedAnswers = answers.map((a) =>
         a.Id === currentQuestion.Id
           ? { ...a, Jawaban: selectedOption }
           : a
       );
     } else {
-      // Tambahkan jawaban baru
       updatedAnswers = [
         ...answers,
         {
@@ -109,57 +104,62 @@ const SoalUjian = ({ questions }) => {
   };
 
   const currentQuestion = questions[currentQuestionIndex];
-  const currentAnswer = answers.find((a) => a.Id === currentQuestion.Id);
 
   return (
-    <div className="card mt-3">
-      <div className="card-header">Soal {currentQuestionIndex + 1}</div>
-      <div className="card-body">
-        <h4>{currentQuestion.Soal}</h4>
+    <div className="mt-4">
+      <h5 className="mb-3 text-dark fw-bold">Soal {currentQuestionIndex + 1}</h5>
 
-        {['A', 'B', 'C', 'D', 'E'].map((option, index) => (
-          <div key={index} className="form-check">
-            <input
-              type="radio"
-              className="form-check-input"
-              name="answer"
-              id={`option-${index}`}
-              value={currentQuestion[`Opsi${option}`]}
-              onChange={() => setSelectedOption(option)}
-              checked={selectedOption === option}
-            />
-            <label className="form-check-label" htmlFor={`option-${index}`}>
-              {currentQuestion[`Opsi${option}`]}
-            </label>
-          </div>
-        ))}
+      <div className="text-dark" style={{ fontSize: '1.2rem', fontWeight: '500' }}>
+        {parse(currentQuestion.Soal)}
+      </div>
 
-        <div className="mt-3">
+      <div className="mt-3">
+        {['A', 'B', 'C', 'D', 'E'].map((option, index) => {
+          const optionValue = currentQuestion[`Opsi${option}`];
+          return optionValue ? (
+            <div key={index} className="form-check mb-2">
+              <input
+                type="radio"
+                className="form-check-input"
+                name="answer"
+                id={`option-${index}`}
+                value={option}
+                onChange={() => setSelectedOption(option)}
+                checked={selectedOption === option}
+              />
+              <label className="form-check-label text-dark" htmlFor={`option-${index}`}>
+                {parse(optionValue)}
+              </label>
+            </div>
+          ) : null;
+        })}
+      </div>
+
+      <div className="mt-4">
+        <button
+          onClick={handleAnswer}
+          className="btn btn-primary me-2"
+        >
+          Jawab
+        </button>
+
+        {currentQuestionIndex > 0 && (
           <button
-            onClick={handleAnswer}
-            className="btn btn-primary me-2"
+            onClick={handlePrevious}
+            className="btn btn-secondary me-2"
           >
-            Jawab
+            Sebelumnya
           </button>
+        )}
 
-          {currentQuestionIndex > 0 && (
-            <button
-              onClick={handlePrevious}
-              className="btn btn-secondary me-2"
-            >
-              Sebelumnya
-            </button>
-          )}
-
-          {lastQuestionAnswered && (
-            <button
-              onClick={handleFinishQuiz}
-              className="btn btn-success"
-            >
-              Selesaikan Ujian
-            </button>
-          )}
-        </div>
+        {lastQuestionAnswered && (
+          <button
+            onClick={handleFinishQuiz}
+            className="btn btn-success"
+          >
+            Selesaikan Ujian
+          </button>
+        )}
       </div>
     </div>
   );

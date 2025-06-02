@@ -34,6 +34,7 @@ import Ujianmu from './pages/ujian/Ujianmu';
 import HasilUjianMateri from './pages/materi/HasilUjianMateri';
 import EditProfilPesertaPage from './pages/profile/EditProfilPesertaPage';
 import HubungiKami from './pages/HubungiKami';
+import PembahasanPage from './pages/ujian/Pembahasan';
 
 
 const App = () => {
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/hasil-ujian/:sectionId/:pesertaId" element={<HasilUjian />} />  
           <Route path="/ujian-materi/:materiId" element={<UjianMateri />} />
           <Route path="/hasil-materi/:materiId/:pesertaId" element={<HasilUjianMateri />} />  
+          <Route path="/pembahasan/:sectionId" element={<PembahasanPage />} />
           <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
