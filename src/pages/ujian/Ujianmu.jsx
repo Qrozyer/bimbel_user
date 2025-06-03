@@ -29,7 +29,26 @@ const Ujianmu = () => {
           return data.some((item) => String(item.PesertaId) === String(pesertaId));
         });
 
-        setUserSections(filteredSections);
+        const hasilPromises = filteredSections.map(async (section) => {
+          try {
+            const hasil = await fetchData(`ujian/hasil/${section.SectionID}/${pesertaId}`);
+            const sudahDikerjakan = hasil && typeof hasil === 'object' && hasil.jumlah_soal > 0;
+            return {
+              ...section,
+              sudahDikerjakan,
+              point: hasil?.point || 0,
+            };
+          } catch {
+            return {
+              ...section,
+              sudahDikerjakan: false,
+              point: 0,
+            };
+          }
+        });
+
+        const sectionDenganHasil = await Promise.all(hasilPromises);
+        setUserSections(sectionDenganHasil);
       } catch (error) {
         console.error('Gagal memuat data ujian peserta:', error);
       } finally {
@@ -66,7 +85,6 @@ const Ujianmu = () => {
             <div className="row">
               {userSections.map((section) => {
                 const active = isActiveSection(section);
-
                 return (
                   <div className="col-md-6 mb-4" key={section.SectionID}>
                     <div
@@ -109,17 +127,41 @@ const Ujianmu = () => {
                               <th>:</th>
                               <td>{section.WaktuUpdate || '-'}</td>
                             </tr>
+                            {section.sudahDikerjakan && (
+                              <tr>
+                                <th>Skor</th>
+                                <th>:</th>
+                                <td>{section.point} poin</td>
+                              </tr>
+                            )}
                           </tbody>
                         </table>
 
-                        <div className="d-flex justify-content-between align-items-center mt-3">
+                        <div className="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2">
                           {active ? (
-                            <button
-                              className="btn btn-outline-success"
-                              onClick={() => navigate(`/ujian/${section.SectionID}`)}
-                            >
-                              <i className="fas fa-pencil-alt me-1"></i> Kerjakan
-                            </button>
+                            section.sudahDikerjakan ? (
+                              <>
+                                <button
+                                  className="btn btn-outline-success"
+                                  onClick={() => navigate(`/ujian/${section.SectionID}`)}
+                                >
+                                  <i className="fas fa-redo me-1"></i> Kerjakan Ulang
+                                </button>
+                                <button
+                                  className="btn btn-outline-info"
+                                  onClick={() => navigate(`/hasil-ujian/${section.SectionID}/${pesertaId}`)}
+                                >
+                                  <i className="fas fa-info-circle me-1"></i> Detail Hasil
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                className="btn btn-outline-success"
+                                onClick={() => navigate(`/ujian/${section.SectionID}`)}
+                              >
+                                <i className="fas fa-pencil-alt me-1"></i> Kerjakan
+                              </button>
+                            )
                           ) : (
                             <button className="btn btn-outline-secondary" disabled>
                               <i className="fas fa-clock me-1"></i> Belum Aktif
@@ -144,3 +186,4 @@ const Ujianmu = () => {
 };
 
 export default Ujianmu;
+  

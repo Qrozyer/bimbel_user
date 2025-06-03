@@ -181,3 +181,35 @@
   font-size: 0.9rem;
   color: #555;
 }
+
+/* --------------------
+   Mobile responsive fix
+   -------------------- */
+@media (max-width: 600px) {
+  /* Kurangi padding greeting card */
+  .greeting-card {
+    padding: 15px 20px;
+  }
+
+  /* Perkecil font size judul */
+  .greeting-text h2 {
+    font-size: 28px;
+  }
+
+  /* Perkecil font size paragraf */
+  .greeting-text p {
+    margin-right: 70px;
+    font-size: 13px;
+  }
+
+  /* Greeting image dipindah ke pojok kanan atas */
+  .greeting-image {
+    right: -20px;
+    top: -30px;
+  }
+
+  /* Ukuran gambar kecil */
+  .greeting-image img {
+    width: 130px;
+  }
+}

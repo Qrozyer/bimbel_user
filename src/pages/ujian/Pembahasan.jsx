@@ -1,22 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import parse from 'html-react-parser';
+import Modal from 'react-modal';
 import { fetchData } from '../../utils/api';
+
+Modal.setAppElement('#root'); // penting untuk accessibility
 
 const PembahasanPage = () => {
   const { sectionId } = useParams();
   const [soalUjian, setSoalUjian] = useState([]);
   const [soalLengkap, setSoalLengkap] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sectionNama, setSectionNama] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState('');
 
   useEffect(() => {
     const fetchSoal = async () => {
       try {
         const ujianSoal = await fetchData(`ujian/soal/${sectionId}`);
         const semuaSoal = await fetchData(`soal`);
+        const sectionData = await fetchData(`soal/section/pilih/${sectionId}`);
+        if (sectionData && sectionData.SectionNama) {
+          setSectionNama(sectionData.SectionNama);
+        } else {
+          setSectionNama(`ID ${sectionId}`);
+        }
 
         setSoalUjian(ujianSoal);
-        setSoalLengkap(semuaSoal);
+        setSoalLengkap(semuaSoal);        
         setLoading(false);
       } catch (error) {
         console.error('Gagal mengambil data soal:', error);
@@ -25,6 +37,16 @@ const PembahasanPage = () => {
     };
     fetchSoal();
   }, [sectionId]);
+
+  const openModal = (videoSrc) => {
+    setVideoUrl(videoSrc);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setVideoUrl('');
+  };
 
   if (loading) return <div>Loading pembahasan...</div>;
 
@@ -42,10 +64,12 @@ const PembahasanPage = () => {
   return (
     <div className="container py-4">
       <h3 className="mb-4" style={{ color: 'black' }}>
-        Pembahasan Soal - Section {sectionId}
+        Pembahasan Soal - Section {sectionNama}
       </h3>
 
-      {pembahasanSoal.length === 0 && <p style={{ color: 'black' }}>Tidak ada soal untuk section ini.</p>}
+      {pembahasanSoal.length === 0 && (
+        <p style={{ color: 'black' }}>Tidak ada soal untuk section ini.</p>
+      )}
 
       {pembahasanSoal.map((soal, idx) => (
         <div key={soal.Id} className="card mb-4 shadow-sm">
@@ -55,7 +79,8 @@ const PembahasanPage = () => {
           <div className="card-body" style={{ color: 'black' }}>
             {/* Pertanyaan */}
             <div>{parse(soal.SoalPertanyaan)}</div>
-            
+
+            {/* Pilihan */}
             <ul className="list-group my-3">
               <li className="list-group-item">{parse(soal.OpsiA || soal.SoalA)}</li>
               <li className="list-group-item">{parse(soal.OpsiB || soal.SoalB)}</li>
@@ -66,7 +91,7 @@ const PembahasanPage = () => {
 
             {/* Jawaban Benar */}
             <p>
-              <strong>Jawaban Benar: </strong>{' '}
+              <strong>Jawaban Benar: </strong>
               <span style={{ color: 'black', fontWeight: 'bold' }}>
                 {soal.SoalJawaban}
               </span>
@@ -79,17 +104,54 @@ const PembahasanPage = () => {
             </div>
 
             {/* Video */}
-            {soal.SoalVideo && soal.SoalVideo !== '-' && (
-              <div className="mt-3">
-                <strong>Video Pembahasan:</strong><br />
-                <video controls width="100%" src={soal.SoalVideo} />
-              </div>
-            )}
+            <div className="mt-3">
+              <strong>Video Pembahasan:</strong><br />
+              {soal.SoalVideo !== '-' ? (
+                <button
+                  className="btn btn-sm btn-outline-primary mt-1"
+                  onClick={() => openModal(soal.SoalVideo)}
+                >
+                  Tonton Video
+                </button>
+              ) : (
+                <span className="text-muted"> - </span>
+              )}
+            </div>
           </div>
         </div>
       ))}
 
-      <Link to="/" className="btn btn-primary">Kembali ke Beranda</Link>
+      <Link to="/" className="btn btn-primary mt-4">
+        Kembali ke Beranda
+      </Link>
+
+      {/* MODAL VIDEO */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Video Pembahasan"
+        style={{
+          overlay: { backgroundColor: 'rgba(0, 0, 0, 0.75)', zIndex: 1000 },
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            background: '#000',
+            border: 'none',
+            padding: 0,
+            width: '90vw',
+            height: '80vh',
+          },
+        }}
+      >
+        <video controls autoPlay style={{ width: '100%', height: '100%' }}>
+          <source src={videoUrl} type="video/mp4" />
+          Browser tidak mendukung video.
+        </video>
+      </Modal>
     </div>
   );
 };

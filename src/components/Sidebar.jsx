@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
+  FaHome,
   FaTachometerAlt,
   FaBook,
   FaClipboardList,
@@ -10,12 +11,38 @@ import {
   FaChevronUp,
   FaBriefcase,
   FaSitemap,
+  FaBars
 } from 'react-icons/fa';
+import './Sidebar.css'; 
 
-const Sidebar = () => {
+const Sidebar = ({ isMobile = false }) => {
   const { pathname } = useLocation();
   const [isKelolaOpen, setIsKelolaOpen] = useState(false);
 
+  // Untuk mobile, hanya icon, tanpa teks
+  if (isMobile) {
+    return (
+      <aside className="sidebar-mobile fixed bottom-0 w-full bg-white border-t border-gray-200 shadow-md z-50 flex justify-around py-4">
+        <Link to="/" className={`text-center ${pathname === '/' ? 'text-[#28cc98]' : 'text-gray-600'}`}>
+          <FaHome size={22} />
+        </Link>
+        <Link to="/bidangmu" className={`text-center ${pathname === '/bidangmu' ? 'text-[#28cc98]' : 'text-gray-600'}`}>
+          <FaBook size={22} />
+        </Link>
+        <Link to="/ujianmu" className={`text-center ${pathname === '/ujianmu' ? 'text-[#28cc98]' : 'text-gray-600'}`}>
+          <FaClipboardList size={22} />
+        </Link>
+        <Link to="/profil" className={`text-center ${pathname === '/profil' ? 'text-[#28cc98]' : 'text-gray-600'}`}>
+          <FaUserCircle size={22} />
+        </Link>
+        <Link to="/menu" className={`text-center ${pathname === '/menu' ? 'text-[#28cc98]' : 'text-gray-600'}`}>
+        <FaBars size={22} />
+      </Link>
+      </aside>
+    );
+  }
+
+  // Versi desktop
   const getLinkClass = (path) =>
     `flex items-center p-3 rounded-lg no-underline transition-all hover:bg-[#d0f5eb] hover:text-[#28cc98] ${
       pathname === path ? 'bg-[#d0f5eb] text-[#28cc98] font-semibold' : 'text-gray-700'
@@ -38,21 +65,18 @@ const Sidebar = () => {
                 Dashboard
               </Link>
             </li>
-
             <li>
               <Link to="/bidangmu" className={getLinkClass('/bidangmu')}>
                 <FaBook className="text-lg mr-3" />
                 Materimu
               </Link>
             </li>
-
             <li>
               <Link to="/ujianmu" className={getLinkClass('/ujianmu')}>
                 <FaClipboardList className="text-lg mr-3" />
                 Ujianmu
               </Link>
             </li>
-
             <li>
               <button
                 onClick={() => setIsKelolaOpen(!isKelolaOpen)}
@@ -81,14 +105,12 @@ const Sidebar = () => {
                 </ul>
               )}
             </li>
-
             <li>
               <Link to="/profil" className={getLinkClass('/profil')}>
                 <FaUserCircle className="text-lg mr-3" />
                 Profil
               </Link>
             </li>
-
             <li>
               <Link
                 to="/logout"

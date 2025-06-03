@@ -35,6 +35,7 @@ import HasilUjianMateri from './pages/materi/HasilUjianMateri';
 import EditProfilPesertaPage from './pages/profile/EditProfilPesertaPage';
 import HubungiKami from './pages/HubungiKami';
 import PembahasanPage from './pages/ujian/Pembahasan';
+import Menu from './pages/Menu';
 
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/ganti-password" element={<GantiPassword />} />  
           <Route path="/hubungi-kami" element={<HubungiKami />} />
+          <Route path="/ujian-soal/:sectionId" element={<UjianSoal />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/bidangmu" element={<BidangmuPage />} />
@@ -61,11 +63,11 @@ const App = () => {
           <Route path="/ujian/:ujianid" element={<UjianPage />} />
           <Route path="/profil" element={<ProfilPeserta />} />
           <Route path="/profil/edit" element={<EditProfilPesertaPage />} />
-          <Route path="/ujian-soal/:sectionId" element={<UjianSoal />} />
           <Route path="/hasil-ujian/:sectionId/:pesertaId" element={<HasilUjian />} />  
           <Route path="/ujian-materi/:materiId" element={<UjianMateri />} />
           <Route path="/hasil-materi/:materiId/:pesertaId" element={<HasilUjianMateri />} />  
           <Route path="/pembahasan/:sectionId" element={<PembahasanPage />} />
+          <Route path="/menu" element={<Menu />} />                
           <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

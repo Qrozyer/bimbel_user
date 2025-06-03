@@ -82,9 +82,12 @@ function GantiPassword() {
   };
 
   const handleLewati = () => {
-    toast.warn('Anda belum mengganti password. Segera ganti password untuk keamanan akun Anda!');
-    navigate('/');
-  };
+  const pesan = 'Anda belum mengganti password. Segera ganti password untuk keamanan akun Anda!';
+  localStorage.setItem('notifikasi', pesan);
+  toast.warn(pesan);
+  navigate('/');
+};
+
 
   if (!peserta) return null;
 

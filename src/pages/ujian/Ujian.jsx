@@ -16,7 +16,26 @@ const UjianPage = () => {
   const [jumlahSoal, setJumlahSoal] = useState(0);
   const dispatch = useDispatch();
 
-  const handleStartQuiz = (sectionId) => {
+  const requestFullScreen = () => {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      return elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      return elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) {
+      return elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+      return elem.msRequestFullscreen();
+    }
+    return Promise.resolve(); // fallback kalau fullscreen gak tersedia
+  };
+
+  const handleStartQuiz = async (sectionId) => {
+    try {
+      await requestFullScreen(); // tunggu sampai fullscreen aktif
+    } catch (error) {
+      console.warn('Fullscreen request gagal atau dibatalkan:', error);
+    }
     navigate(`/ujian-soal/${sectionId}`);
   };
 
@@ -137,6 +156,8 @@ const UjianPage = () => {
               <li>- Sistem akan mengingatkan 10 menit sebelum waktu ujian berakhir.</li>              
               <li>- Gunakan waktu dengan baik dan pastikan <strong>10 menit terakhir</strong> kamu telah memeriksa semua jawaban.</li>
               <li>- Setelah selesai, klik tombol <strong>Selesai Ujian</strong> untuk menyimpan hasilmu.</li>                    
+              <li>- Setelah kamu mulai mengerjakan ujian, dilarang keluar dari tab website ujian atau membuka aplikasi lain. Fokuslah penuh pada pengerjaan ujian sampai selesai untuk menghindari diskualifikasi atau masalah teknis. Pastikan kamu sudah meluangkan waktu yang cukup sebelum memulai.</li>
+              <li>- Saat mengerjakan soal, pastikan kamu selalu mengklik tombol <strong>Jawab</strong> setelah memilih jawaban. Hanya jawaban yang diklik tombol <strong>Jawab</strong> yang akan tersimpan. Jadi, jangan sampai lupa mengklik tombol tersebut agar jawabanmu terdata dengan benar.</li>
             </ul>                                  
                         <br /><strong>📞 Bantuan Teknis:</strong><br />
   <ul className="mb-0 mt-2">

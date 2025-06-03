@@ -1,24 +1,37 @@
+// Timer.jsx
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
-const Timer = ({ duration }) => {
-  // konversi menit ke detik
+const Timer = ({ duration, onTimeUp, onTenMinutesLeft }) => {
   const [timeLeft, setTimeLeft] = useState(duration * 60);
+  const [notified, setNotified] = useState(false);
 
   useEffect(() => {
-    if (timeLeft === 0) return;
+    if (timeLeft <= 0) {
+      onTimeUp(); // panggil saat habis
+      return;
+    }
+
+    if (timeLeft === 600 && !notified) {
+      toast.info('⏳ Sisa waktu tinggal 10 menit! Silakan periksa kembali jawaban Anda.', {        
+        autoClose: 10000,
+      });
+      setNotified(true);      
+      onTenMinutesLeft?.(); // opsional callback
+    }
 
     const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
           clearInterval(timer);
           return 0;
         }
-        return prevTime - 1;
+        return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [timeLeft, onTimeUp, notified]);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;

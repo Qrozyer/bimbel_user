@@ -24,20 +24,20 @@
 }
 
 .profil-left p {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .profil-right {
   background: #fff;
   flex: 1;
-  padding: 3rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .profil-right p {
-  font-size: 1rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   color: #333;
 }
@@ -53,19 +53,19 @@
 .profil-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.65rem; 
-}
+  font-size: 0.9rem; /* sebelumnya 0.65rem, jadi lebih besar */
+} 
 
 .profil-table td {
-  padding: 5px; 
+  padding: 8px; /* tambah padding supaya rapi */
   vertical-align: top;
-  color: #333;
+  color: #000000; /* karena card-body putih, ini harus kontras */
 }
 
 .profil-table td:first-child {
   width: 160px;
   font-weight: 600;
-  color: #555;
+  color: #000000;
 }
 
 .profil-table td:nth-child(2) {
@@ -139,7 +139,7 @@
   }
 
   .profil-left,
-  .profil-right {
+  .profil-right {    
     padding: 2rem;
   }
 
