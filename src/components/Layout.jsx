@@ -8,38 +8,27 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   return (
-    <div className="d-flex min-vh-100">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar Desktop */}
-      <div className="d-none d-md-block bg-gray-100" style={{ width: '240px' }}>
+      <div className="hidden md:block">
         <Sidebar />
       </div>
 
-      {/* Area Utama */}
-      <div className="d-flex flex-column flex-grow-1 bg-gray-100" style={{ minHeight: '100vh' }}>
-        {/* Navbar */}
-        <header>
-          <Navbar />
-        </header>
-
-        {/* Konten Utama */}
-        <main className="flex-grow-1 py-3 px-3 mb-4 mr-5">
-          <div className="w-100">
-            <Outlet />
-          </div>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <Navbar />
+        <main className="flex-grow p-4 md:ml-0">
+          <Outlet />
         </main>
-
-        {/* Footer Desktop */}
-        <footer className="text-center py-2 footer-desktop">
+        <footer className="footer-desktop text-center py-2">
           <Footer />
         </footer>
-
-        {/* Sidebar Mobile (Bottom Navbar) */}
-        <div className="d-md-none">
+        {/* Sidebar Mobile */}
+        <div className="md:hidden">
           <Sidebar isMobile />
         </div>
       </div>
 
-      {/* Toast */}
       <ToastContainer
         position="top-right"
         autoClose={3000}

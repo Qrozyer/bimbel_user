@@ -73,7 +73,7 @@ const PembahasanPage = () => {
 
       {pembahasanSoal.map((soal, idx) => (
         <div key={soal.Id} className="card mb-4 shadow-sm">
-          <div className="card-header bg-info text-white">
+          <div className="card-header text-white" style={{ backgroundColor: '#20B486' }}>
             <strong>Soal #{idx + 1}</strong>
           </div>
           <div className="card-body" style={{ color: 'black' }}>
@@ -108,7 +108,7 @@ const PembahasanPage = () => {
               <strong>Video Pembahasan:</strong><br />
               {soal.SoalVideo !== '-' ? (
                 <button
-                  className="btn btn-sm btn-outline-primary mt-1"
+                  className="btn btn-sm btn-outline-success mt-1"
                   onClick={() => openModal(soal.SoalVideo)}
                 >
                   Tonton Video

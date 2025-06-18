@@ -32,10 +32,12 @@
 
 .greeting-image {
   position: absolute;
-  right: 20px;
-  bottom: -40px;
+  right: -20px;
+  top: -30px;
   z-index: 0;
+  pointer-events: none;
 }
+
 
 .greeting-image img {
   width: 280px;
