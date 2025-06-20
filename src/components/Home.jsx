@@ -9,32 +9,46 @@ import m4 from '../assets/images/m4.jpg';
 import m5 from '../assets/images/m5.jpg';
 import m6 from '../assets/images/m6.jpg';
 import { fetchData } from '../utils/api';
-import { Link } from 'react-router-dom';
 
 const Home = () => {
-  const [materiList, setMateriList] = useState([]);
-  const [subBidangList, setSubBidangList] = useState([]);
-  const [totalMateri, setTotalMateri] = useState(0);
+  const [bidangList, setBidangList] = useState([]);
+  const [ujianList, setUjianList] = useState([]);
+  const [totalBidang, setTotalBidang] = useState(0);
   const [totalUjian, setTotalUjian] = useState(0);
   const [totalPeserta, setTotalPeserta] = useState(0);
+  const [subBidangCounts, setSubBidangCounts] = useState({});
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const materiRes = await fetchData('/materi');
-        setMateriList(materiRes.slice(0, 6));
-        setTotalMateri(materiRes.length);
-
-        const subBidangRes = await fetchData('/sub-bidang');
-        setSubBidangList(subBidangRes);
+        const bidangRes = await fetchData('/bidang');
+        const bidangTop = bidangRes.slice(0, 8);
+        setBidangList(bidangTop);
+        setTotalBidang(bidangRes.length);
 
         const ujianRes = await fetchData('/ujian/data/section');
+        setUjianList(ujianRes.slice(0, 8));
         setTotalUjian(ujianRes.length);
 
         const pesertaRes = await fetchData('/peserta');
         setTotalPeserta(pesertaRes.length);
+
+        const counts = {};
+        await Promise.all(
+          bidangTop.map(async (bidang) => {
+            try {
+              const res = await fetchData(`/sub-bidang/filter/${bidang.BidangId}`);
+              console.log(`Sub-bidang for ${bidang.BidangNama}:`, res);
+              counts[bidang.BidangId] = Array.isArray(res) ? res.length : 0;
+            } catch (error) {
+              console.error(`Gagal mengambil sub-bidang untuk BidangId ${bidang.BidangId}:`, error);
+              counts[bidang.BidangId] = 0;
+            }
+          })
+        );
+        setSubBidangCounts(counts);
       } catch (err) {
-        console.error('Gagal mengambil data:', err);
+        console.error('Gagal mengambil data utama:', err);
       }
     };
 
@@ -49,11 +63,6 @@ const Home = () => {
     {};
 
   const namaPeserta = peserta.peserta?.PesertaNama || 'Peserta';
-
-  const getSubNama = (subId) => {
-    const sub = subBidangList.find((s) => s.SubId === subId);
-    return sub?.SubNama || 'Sub-bidang tidak ditemukan';
-  };
 
   return (
     <div className="home-container rounded-2xl shadow-xl p-5 bg-white">
@@ -79,8 +88,8 @@ const Home = () => {
             <FaBook />
           </div>
           <div>
-            <p className="label">Total Materi</p>
-            <p className="value">{totalMateri}</p>
+            <p className="label">Total Bidang</p>
+            <p className="value">{totalBidang}</p>
           </div>
         </div>
         <div className="overview-card card-yellow">
@@ -103,30 +112,64 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Popular Materi */}
+      {/* Popular Bidang */}
       <div className="popular-header mt-5 mb-3">
-        <h3>Popular Materi</h3>
+        <h3>Popular Bidang</h3>
       </div>
 
       <div className="popular-grid">
-        {materiList.map((materi, index) => (
-          <Link
-            to={`/isi-materi/${materi.MateriId}`}
-            key={materi.MateriId}
-            className="materi-card"
-          >
+        {bidangList.map((bidang, index) => (
+          <div className="bidang-card" key={bidang.BidangId}>
             <img
-              src={images[index]}
-              alt={materi.MateriJudul}
-              className="materi-image"
+              src={images[index % images.length]}
+              alt={bidang.BidangNama}
+              className="bidang-image"
             />
-            <div className="materi-content">
-              <h4>{materi.MateriJudul}</h4>
+            <div className="bidang-content">
+              <h4>{bidang.BidangNama}</h4>
               <p className="text-muted mb-1">
-                <strong>Sub Bidang:</strong> {getSubNama(materi.SubId)}
+                <strong>Total Sub-Bidang:</strong> {subBidangCounts[bidang.BidangId] ?? 0}
               </p>
             </div>
-          </Link>
+          </div>
+        ))}
+      </div>
+
+      {/* Popular Ujian */}
+      <div className="popular-header mt-5 mb-3">
+        <h3>Popular Ujian</h3>
+      </div>
+
+      <div className="popular-grid">
+        {ujianList.map((ujian, index) => (
+          <div className="bidang-card" key={ujian.SectionId}>
+            <img
+              src={images[index % images.length]}
+              alt={ujian.SectionNama}
+              className="bidang-image"
+            />
+            <div className="bidang-content">
+              <h4>{ujian.SectionNama}</h4>
+              <p className="text-muted mb-1">
+                <strong>Tanggal:</strong> {new Date(ujian.TglUjian).toLocaleDateString()}
+              </p>
+              <p className="text-muted">
+                <strong>Status:</strong>{' '}
+                <span
+                  style={{
+                    color: 'white',
+                    backgroundColor: ujian.Tampil === 1 ? 'green' : 'red',
+                    padding: '2px 8px',
+                    borderRadius: '8px',
+                    fontWeight: 'bold',
+                    fontSize: '0.85rem'
+                  }}
+                >
+                  {ujian.Tampil === 1 ? 'Aktif' : 'Tidak Aktif'}
+                </span>
+              </p>
+            </div>
+          </div>
         ))}
       </div>
     </div>
