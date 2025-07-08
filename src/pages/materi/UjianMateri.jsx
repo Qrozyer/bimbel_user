@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux'; // Mengimpor useSelector untuk mengambil data dari Redux
 import MateriUjian from '../../components/MateriUjian'; // Mengimpor komponen Quiz
-import Timer from '../../components/Timer'; // Mengimpor komponen Timer
 import { fetchData } from '../../utils/api'; // Mengimpor fetchData dari utils/api
 
 const UjianMateri = () => {
@@ -10,6 +9,7 @@ const UjianMateri = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  console.log('Materi ID:', materiId);
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -17,6 +17,7 @@ const UjianMateri = () => {
         const response = await fetchData(`ujian/materi/${materiId}`);
         if (response) {
           setQuestions(response); // Menyimpan soal ke state
+          console.log('Questions fetched:', response);
         } else {
           console.error('No questions found');
         }

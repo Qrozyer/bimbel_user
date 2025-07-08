@@ -90,6 +90,15 @@ const SoalUjian = forwardRef(({ questions }, ref) => {
     );
   }
 
+  if (!questions || questions.length === 0) {
+  return (
+    <div className="text-center text-muted py-5">
+      <i className="fas fa-exclamation-circle fa-2x mb-3"></i>
+      <h5>Belum ada soal pada ujian ini.</h5>
+    </div>
+  );
+}
+
   const isAnswered = (questionId) => {
     return answers.some((a) => a.Id === questionId);
   };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchData } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
+import { fetchData } from '../../utils/api';
 import './UjianSection.css';
 
 const UjianSectionList = () => {
@@ -119,29 +119,31 @@ const UjianSectionList = () => {
                         </table>
 
                         <div className="d-flex justify-content-between align-items-center mt-3">
-{userInSection && active ? (
-  <button
-    className="btn btn-outline-success"
-    onClick={() => navigate(`/ujian/${section.SectionID}`)}
-  >
-    <i className="fas fa-pencil-alt me-1"></i> Kerjakan
-  </button>
-) : userInSection && !active ? (
-  <button className="btn btn-outline-secondary" disabled>
-    <i className="fas fa-clock me-1"></i> Belum Aktif
-  </button>
-) : (
-  <div className="bidang-status">
-    <i className="fas fa-lock"></i>
-    <span className="ms-1">Tidak tersedia</span>
-  </div>
-)}
-
-
-
-                          <span className={`badge fs-6 px-4 py-3 ${active ? 'bg-success' : 'bg-danger'}`}>
-                            {active ? 'Aktif' : 'Tidak Aktif'}
-                          </span>
+                          {userInSection && active ? (
+                            <button
+                              className="btn btn-outline-success"
+                              onClick={() => navigate(`/ujian/${section.SectionID}`)}
+                            >
+                              <i className="fas fa-pencil-alt me-1"></i> Kerjakan
+                            </button>
+                          ) : userInSection && !active ? (
+                            <button className="btn btn-outline-secondary" disabled>
+                              <i className="fas fa-clock me-1"></i> Belum Aktif
+                            </button>
+                          ) : (
+                            <div className="bidang-status w-100 justify-content-between">
+                              <div className="status-left">
+                                <i className="fas fa-lock"></i>
+                                <span className="status-text">Tidak tersedia</span>
+                              </div>
+                              <button
+                                className="btn btn-sm btn-outline-success unlock-button"
+                                onClick={() => navigate('/hubungi-kami')}
+                              >
+                                <i className="fas fa-unlock"></i> Unlock
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

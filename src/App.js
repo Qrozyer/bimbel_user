@@ -46,10 +46,10 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/hubungi-kami" element={<HubungiKami />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/ganti-password" element={<GantiPassword />} />  
-          <Route path="/hubungi-kami" element={<HubungiKami />} />
           <Route path="/ujian-soal/:sectionId" element={<UjianSoal />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

@@ -8,6 +8,7 @@ const EditProfilPeserta = () => {
   const navigate = useNavigate();
   const pesertaLocal = JSON.parse(localStorage.getItem("peserta") || sessionStorage.getItem("peserta"));
   const pesertaId = pesertaLocal?.peserta?.PesertaId;
+  const [daftarAsal, setDaftarAsal] = useState([]);
 
   const [form, setForm] = useState({
     PesertaEmail: '',
@@ -51,6 +52,21 @@ const EditProfilPeserta = () => {
       navigate('/');
     }
   }, [pesertaId]);
+
+  useEffect(() => {
+  const getDaftarAsal = async () => {
+    try {
+      const res = await fetchData('/peserta/asal');
+      if (Array.isArray(res)) {
+        setDaftarAsal(res);
+      }
+    } catch (error) {
+      console.error('Gagal mengambil daftar asal', error);
+    }
+  };
+
+  getDaftarAsal();
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -161,15 +177,22 @@ const EditProfilPeserta = () => {
           </div>
 
           <div className="mb-3">
-            <label className="form-label text-dark">Asal Sekolah</label>
-            <input
-              type="text"
-              className="form-control"
-              name="PesertaAsalSekolah"
-              value={form.PesertaAsalSekolah}
-              onChange={handleChange}
-            />
-          </div>
+  <label className="form-label text-dark">Asal Sekolah</label>
+  <select
+    className="form-control"
+    name="PesertaAsalSekolah"
+    value={form.PesertaAsalSekolah}
+    onChange={handleChange}
+  >
+    <option value="">-- Pilih Asal Sekolah --</option>
+    {daftarAsal.map((item, index) => (
+      <option key={index} value={item.AsalDaerah}>
+        {item.AsalDaerah}
+      </option>
+    ))}
+  </select>
+</div>
+
 
           <div className="text-end mt-4">
             <button className="btn btn-secondary me-2" onClick={handleCancel}>Batal</button>

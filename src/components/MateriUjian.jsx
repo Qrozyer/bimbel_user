@@ -56,6 +56,7 @@ const MateriUjian = ({ questions }) => {
       updatedAnswers = [
         ...answers,
         {
+
           MsId: currentQuestion.MsId,
           PesertaId: pesertaId,
           Jawaban: selectedOption,
@@ -116,7 +117,7 @@ const MateriUjian = ({ questions }) => {
   return (
     <div className="card mt-3">
       <div className="card-header">Soal {currentQuestionIndex + 1}</div>
-      <div className="card-body">
+      <div className="card-body text-dark">
         <h4 dangerouslySetInnerHTML={{ __html: currentQuestion.Soal }}></h4>
         {['A', 'B', 'C', 'D', 'E'].map((option, index) => (
           <div key={index} className="form-check">

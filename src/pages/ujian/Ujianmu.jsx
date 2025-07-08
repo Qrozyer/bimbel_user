@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchData } from '../../utils/api';
+import { fetchData, fetchHasilUjianSafe } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import './Ujianmu.css';
 
@@ -30,21 +30,13 @@ const Ujianmu = () => {
         });
 
         const hasilPromises = filteredSections.map(async (section) => {
-          try {
-            const hasil = await fetchData(`ujian/hasil/${section.SectionID}/${pesertaId}`);
-            const sudahDikerjakan = hasil && typeof hasil === 'object' && hasil.jumlah_soal > 0;
-            return {
-              ...section,
-              sudahDikerjakan,
-              point: hasil?.point || 0,
-            };
-          } catch {
-            return {
-              ...section,
-              sudahDikerjakan: false,
-              point: 0,
-            };
-          }
+          const hasil = await fetchHasilUjianSafe(`ujian/hasil/${section.SectionID}/${pesertaId}`);
+          const sudahDikerjakan = hasil && typeof hasil === 'object' && hasil.jumlah_soal > 0;
+          return {
+            ...section,
+            sudahDikerjakan,
+            point: hasil?.point || 0,
+          };
         });
 
         const sectionDenganHasil = await Promise.all(hasilPromises);
@@ -186,4 +178,3 @@ const Ujianmu = () => {
 };
 
 export default Ujianmu;
-  

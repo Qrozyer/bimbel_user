@@ -8,7 +8,7 @@
   opacity: 0.6;
   box-shadow: none !important;
   transform: none !important;
-  cursor: default;
+  cursor: pointer;
 }
 
 
@@ -25,6 +25,57 @@
 .bidang-status i {
   font-size: 16px;
   line-height: 1;
+}
+
+.bidang-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  font-weight: 600;
+  font-size: 14px;
+  color: #dc3545;
+  gap: 8px;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-text {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.unlock-button {
+  padding: 4px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  border: 1px solid #198754;
+  color: #198754;
+  background-color: transparent;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+
+  /* Tambahan agar bisa diklik meskipun parent card-disabled */
+  pointer-events: auto;
+  z-index: 1;
+}
+
+
+.unlock-button:hover {
+  background-color: #198754;
+  color: #fff;
+}
+
+.unlock-button:hover i {
+  color: #fff;
 }
 
 .table th {

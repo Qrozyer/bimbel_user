@@ -36,7 +36,7 @@ const HasilUjianMateri = () => {
       <h2>Hasil Ujian</h2>
 
       <div className="card mb-4">
-        <div className="card-body">
+        <div className="card-body text-dark">
           <h5>Nilai: <strong>{result.nilai}</strong></h5>
           <h5>Jumlah Soal: {result.jumlah_soal}</h5>
           <h5>Jumlah Benar: {result.jumlah_benar}</h5>
@@ -54,7 +54,7 @@ const HasilUjianMateri = () => {
             key={index}
             className={`card mb-3 border-${isCorrect ? 'success' : 'danger'}`}
           >
-            <div className="card-body">
+            <div className="card-body text-dark">
               <h5>
                 Soal {index + 1} {isCorrect ? '✅' : '❌'}
               </h5>
@@ -70,7 +70,7 @@ const HasilUjianMateri = () => {
               <p><strong>Jawaban Anda:</strong> {item.Jawaban}</p>
               <p><strong>Jawaban Benar:</strong> {item.JawabanBenar}</p>
               <p><strong>Pembahasan:</strong></p>
-              <pre style={{ whiteSpace: 'pre-wrap' }}>{item.Pembahasan || 'Tidak tersedia'}</pre>
+              <pre style={{ whiteSpace: 'pre-wrap' }}><span dangerouslySetInnerHTML={{ __html: item.Pembahasan }}></span></pre>
 
               {embedUrl ? (
                 <div className="mt-3">

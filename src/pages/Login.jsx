@@ -147,7 +147,7 @@ function Login() {
           <button type="submit" className="submit-button">Masuk</button>
 
           <div className="forgot-link">
-            <a href="#">Lupa password?</a>
+            <a href="/hubungi-kami">Lupa password?</a>
           </div>
         </form>
       </div>

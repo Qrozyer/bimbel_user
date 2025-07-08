@@ -162,7 +162,7 @@ const UjianPage = () => {
                         <br /><strong>📞 Bantuan Teknis:</strong><br />
   <ul className="mb-0 mt-2">
   <li>Jika mengalami kendala saat ujian, silakan hubungi:</li>
-    <li>WhatsApp: <a href="https://wa.me/6282325646503" target="_blank" rel="noopener noreferrer">+62 823-2564-6503</a></li>    
+    <li>WhatsApp: <a style={{color: '#20B486'}} href="https://wa.me/6282325646503" target="_blank" rel="noopener noreferrer">+62 823-2564-6503</a></li>    
   </ul>
           </div>
 
